@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliance FMEA – SCHURTER</title>
+<style>
+  :root {
+    --blau:       #1B4F8A;
+    --blau-hell:  #2E6DA4;
+    --blau-bg:    #EBF1F8;
+    --rot:        #E2001A;
+    --grau-dk:    #3C3C3C;
+    --grau:       #6F6F6F;
+    --grau-hell:  #D4D4D4;
+    --grau-bg:    #F4F4F4;
+    --border:     #CCCCCC;
+    --weiss:      #FFFFFF;
+    --text:       #1A1A1A;
+    --orange:     #C85A00;
+    --gruen:      #1E6B1E;
+    --gelb:       #7A6000;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #E2E8F0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  /* ══ KOPFZEILE ══════════════════════════════════════════════════════ */
+  .kopf {
+    background: var(--blau);
+    border-bottom: 3px solid var(--blau-hell);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-bereich { display: flex; align-items: center; gap: 14px; }
+
+  .logo-kasten {
+    background: var(--weiss);
+    color: var(--blau);
+    font-weight: bold;
+    font-size: 13px;
+    padding: 4px 10px;
+    letter-spacing: 2px;
+    line-height: 1.4;
+  }
+
+  .logo-sub {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    font-weight: normal;
+    display: block;
+    margin-top: 1px;
+  }
+
+  .dok-titel { font-size: 17px; font-weight: bold; color: var(--weiss); }
+  .dok-sub   { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+  .kopf-rechts { text-align: right; font-size: 11px; color: rgba(255,255,255,0.7); }
+  .kopf-rechts .projekt { font-size: 13px; font-weight: bold; color: var(--weiss); margin-bottom: 3px; }
+
+
+
+  /* ══ INHALT ═════════════════════════════════════════════════════════ */
+  .inhalt { padding: 20px 32px; }
+
+  /* ══ BLOCK ══════════════════════════════════════════════════════════ */
+  .block {
+    background: var(--weiss);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--blau);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+
+  .block-titel {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--blau);
+    border-bottom: 1px solid var(--grau-hell);
+    padding-bottom: 7px;
+    margin-bottom: 13px;
+  }
+
+  /* ══ FORMULAR ═══════════════════════════════════════════════════════ */
+  .formgitter {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 11px 18px;
+  }
+
+  .feld { display: flex; flex-direction: column; gap: 3px; }
+
+  .feld label {
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--grau);
+  }
+
+  .feld input, .feld select, .feld textarea {
+    border: 1px solid var(--border);
+    padding: 5px 7px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--weiss);
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+
+  .feld input:focus, .feld select:focus, .feld textarea:focus {
+    border-color: var(--blau);
+  }
+
+  .feld-voll { grid-column: 1 / -1; }
+
+  /* ══ SKALENKARTEN ═══════════════════════════════════════════════════ */
+  .skalen-raster {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .skala-karte {
+    background: var(--weiss);
+    border: 1px solid var(--border);
+    padding: 13px 15px;
+  }
+
+  .skala-karte.s-karte { border-top: 3px solid #C00000; }
+  .skala-karte.a-karte { border-top: 3px solid var(--orange); }
+  .skala-karte.e-karte { border-top: 3px solid var(--blau); }
+
+  .skala-karte h3 {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .skalen-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    color: var(--weiss);
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .s-karte .skalen-badge { background: #C00000; }
+  .a-karte .skalen-badge { background: var(--orange); }
+  .e-karte .skalen-badge { background: var(--blau); }
+
+  .stufe {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 5px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--grau-bg);
+    font-size: 12px;
+    align-items: start;
+  }
+  .stufe:last-child { border-bottom: none; }
+
+  .stufen-nr {
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 1.1;
+    text-align: center;
+  }
+  .s-karte .stufen-nr { color: #C00000; }
+  .a-karte .stufen-nr { color: var(--orange); }
+  .e-karte .stufen-nr { color: var(--blau); }
+
+  .stufen-text strong { display: block; font-size: 11px; font-weight: bold; margin-bottom: 1px; }
+  .stufen-text span   { color: var(--grau); font-size: 11px; }
+
+  /* ══ INFOZEILE ══════════════════════════════════════════════════════ */
+  .infozeile {
+    background: var(--blau-bg);
+    border-left: 4px solid var(--blau);
+    padding: 9px 14px;
+    font-size: 12px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .infozeile strong { color: var(--blau); }
+
+  /* ══ SCHWELLENREGEL ═════════════════════════════════════════════════ */
+  .schwelle {
+    background: #F0F4FA;
+    border: 1px solid #C0D0E8;
+    border-left: 4px solid var(--blau);
+    padding: 10px 16px;
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  .schwelle strong { color: var(--blau); }
+
+  /* ══ STEUERUNG ══════════════════════════════════════════════════════ */
+  .steuerung { display: flex; gap: 8px; margin-bottom: 13px; flex-wrap: wrap; align-items: center; }
+
+  button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: var(--weiss);
+    color: var(--text);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    transition: all 0.1s;
+  }
+  button:hover { border-color: var(--blau); color: var(--blau); }
+  button.btn-prim { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
+  button.btn-prim:hover { background: #153f70; color: var(--weiss); }
+  button.btn-ghost { color: var(--grau); font-weight: normal; }
+
+  #zeilen-anzahl { font-size: 11px; color: var(--grau); margin-left: 4px; }
+
+  /* ══ TABELLE ════════════════════════════════════════════════════════ */
+  .tabelle-rahmen {
+    background: var(--weiss);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead tr { background: var(--blau); color: var(--weiss); }
+
+  th {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 9px 10px;
+    text-align: left;
+    white-space: nowrap;
+    border-right: 1px solid #2a5f9a;
+  }
+  th:last-child { border-right: none; }
+  th.th-s   { background: #8B0010; }
+  th.th-a   { background: #8B3800; }
+  th.th-e   { background: #0D3060; }
+  th.th-rpz { background: #111827; }
+
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: #FAFBFC; }
+  tbody tr:hover { background: var(--blau-bg); }
+
+  td {
+    padding: 7px 9px;
+    vertical-align: top;
+    border-right: 1px solid #ECECEC;
+  }
+  td:last-child { border-right: none; }
+
+  td input, td textarea, td select {
+    background: transparent;
+    border: 1px solid transparent;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: var(--text);
+    width: 100%;
+    padding: 2px 3px;
+    outline: none;
+    resize: none;
+    transition: border-color 0.1s;
+  }
+  td input:focus, td textarea:focus, td select:focus {
+    border-color: var(--blau);
+    background: var(--weiss);
+  }
+
+  .score-sel {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    width: 50px !important;
+    cursor: pointer;
+  }
+  .score-s { color: #C00000; }
+  .score-a { color: var(--orange); }
+  .score-e { color: var(--blau); }
+
+  /* Begründungsfeld – Toyota DRBFM */
+  .begr-feld {
+    border-left: 2px solid var(--grau-hell) !important;
+    padding-left: 5px !important;
+    font-style: italic;
+    color: var(--grau) !important;
+    font-size: 11px !important;
+  }
+  .begr-feld:focus {
+    border-left-color: var(--blau) !important;
+    color: var(--text) !important;
+    font-style: normal;
+  }
+
+  /* RPZ Badges */
+  .rpz-badge {
+    display: inline-block;
+    padding: 3px 7px;
+    font-weight: bold;
+    font-size: 14px;
+    min-width: 42px;
+    text-align: center;
+    border: 2px solid;
+  }
+  .rpz-KRITISCH { color: #C00000; border-color: #C00000; background: #FFF0F0; }
+  .rpz-HOCH     { color: var(--orange); border-color: var(--orange); background: #FFF5EC; }
+  .rpz-MITTEL   { color: var(--gelb);   border-color: #C8A800;       background: #FFFBE0; }
+  .rpz-GERING   { color: var(--gruen);  border-color: var(--gruen);  background: #F0FFF0; }
+
+  /* Entscheid */
+  .ent-GL { color: #C00000;      font-weight: bold; font-size: 11px; }
+  .ent-R  { color: var(--orange); font-weight: bold; font-size: 11px; }
+  .ent-E  { color: var(--gelb);   font-weight: bold; font-size: 11px; }
+  .ent-OK { color: var(--gruen);              font-size: 11px; }
+
+  /* Status */
+  .st-Offen          { color: #C00000;      font-weight: bold; }
+  .st-In-Bearbeitung { color: var(--orange); font-weight: bold; }
+  .st-Abgeschlossen  { color: var(--gruen); }
+
+  .zeilen-nr { font-size: 11px; color: var(--grau); font-weight: bold; text-align: center; }
+
+  .del-btn {
+    background: none; border: none;
+    color: var(--grau-hell); cursor: pointer;
+    font-size: 14px; padding: 0 3px;
+    transition: color 0.1s;
+  }
+  .del-btn:hover { color: var(--rot); border: none; }
+
+  /* ══ ZUSAMMENFASSUNG ════════════════════════════════════════════════ */
+  .zusammenfassung {
+    background: var(--weiss);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blau);
+    padding: 13px 20px;
+    display: flex;
+    gap: 26px;
+    flex-wrap: wrap;
+  }
+
+  .sum-pos { display: flex; flex-direction: column; gap: 2px; }
+  .sum-label { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: var(--grau); }
+  .sum-wert  { font-size: 20px; font-weight: bold; }
+  .c-krit { color: #C00000; }
+  .c-hoch { color: var(--orange); }
+  .c-mit  { color: var(--gelb); }
+  .c-ger  { color: var(--gruen); }
+  .c-blau { color: var(--blau); }
+
+  [title] { cursor: help; border-bottom: 1px dotted var(--grau-hell); }
+
+  @media print {
+    body { background: var(--weiss); }
+    .steuerung { display: none; }
+    button { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="kopf">
+  <div class="logo-bereich">
+    <div class="logo-kasten">
+      SCHURTER
+      <span class="logo-sub">ELECTRONIC COMPONENTS</span>
+    </div>
+    <div>
+      <div class="dok-titel">Compliance FMEA</div>
+      <div class="dok-sub">Fehlerarten- und Auswirkungsanalyse – Compliance &amp; Produktsicherheit</div>
+    </div>
+  </div>
+  <div class="kopf-rechts">
+    <div class="projekt" id="kopf-projekt">Compliance FMEA</div>
+    <div id="kopf-meta"></div>
+  </div>
+</div>
+
+<div class="inhalt">
+
+  <!-- DOKUMENTKOPF -->
+  <div class="block">
+    <div class="block-titel">Dokumentkopf</div>
+    <div class="formgitter">
+      <div class="feld">
+        <label>Projekt / Produkt *</label>
+        <input type="text" id="meta-projekt" placeholder="z.B. DEN Drossel – Transfer VISTA" oninput="aktualisiereKopf()">
+      </div>
+      <div class="feld">
+        <label>Artikelnummer</label>
+        <input type="text" id="meta-doknr" placeholder="z.B. MGA-S" oninput="aktualisiereKopf()">
+      </div>
+      <div class="feld">
+        <label>Datum *</label>
+        <input type="date" id="meta-datum" oninput="aktualisiereKopf()">
+      </div>
+      <div class="feld">
+        <label>Erstellt von *</label>
+        <input type="text" id="meta-autor" placeholder="Name, Abteilung" oninput="aktualisiereKopf()">
+      </div>
+      <div class="feld">
+        <label>Geprüft von</label>
+        <input type="text" id="meta-pruefer" placeholder="Name" oninput="aktualisiereKopf()">
+      </div>
+      <div class="feld">
+        <label>Freigabe (Management)</label>
+        <input type="text" id="meta-freigabe" placeholder="Name" oninput="aktualisiereKopf()">
+      </div>
+      <div class="feld feld-voll">
+        <label>Analysegegenstand / Auslöser *</label>
+        <textarea rows="2" id="meta-umfang" placeholder="Was wird analysiert, warum, was hat diese FMEA ausgelöst?" oninput="speichern()"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- hidden threshold inputs – Schurter Standard, nicht sichtbar -->
+  <input type="hidden" id="meta-schwelle-hoch" value="27">
+  <input type="hidden" id="meta-schwelle-mitte" value="12">
+
+  <!-- TEAM -->
+  <div class="block">
+    <div class="block-titel">Beteiligte Personen</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:0; margin-bottom:10px;">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.4px;color:var(--grau);padding:4px 8px 6px;">Name</div>
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.4px;color:var(--grau);padding:4px 8px 6px;">Abteilung / Funktion</div>
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.4px;color:var(--grau);padding:4px 8px 6px;">Rolle in dieser FMEA</div>
+      <div></div>
+    </div>
+    <div id="team-liste" style="display:flex; flex-direction:column; gap:4px; margin-bottom:10px;"></div>
+    <button class="btn-prim" onclick="teamZeileHinzu()" style="font-size:11px; padding:5px 12px;">+ Person hinzufügen</button>
+  </div>
+
+  <!-- BEWERTUNGSSKALEN -->
+  <div style="margin-bottom:6px;padding:8px 12px;background:var(--blau-bg);border-left:3px solid var(--blau);font-size:11px;color:var(--text);">
+    <strong>Zwei-Logik-Prinzip:</strong> &nbsp;
+    <strong>S allein</strong> bestimmt die Eskalationsebene – unabhängig von A und E. &nbsp;·&nbsp;
+    <strong>A × E</strong> bestimmt die Dringlichkeit der Massnahme innerhalb dieser Ebene (max. 16).
+  </div>
+  <div class="skalen-raster" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="skala-karte s-karte">
+      <h3><span class="skalen-badge">S</span>Schwere → bestimmt Eskalationsebene</h3>
+      <div class="stufe">
+        <div class="stufen-nr">4</div>
+        <div class="stufen-text">
+          <strong>Hauptfehler mit Sicherheitsrelevanz → Management-Entscheid</strong>
+          <span>Sicherheitsfunktion betroffen – Verletzung, Unfall oder Gefahr für Leib und Leben möglich. Ort ausserhalb Kontrolle (Feld, Assembly beim Kunden, WE nach Auslieferung)</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">3</div>
+        <div class="stufen-text">
+          <strong>Hauptfehler extern → Ressort-Entscheid</strong>
+          <span>Produkt nicht funktionsfähig oder Rückruf nötig. Intern durch ordentliche QS festgestellt. Kostenfolgen &gt; 50 kFr.</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">2</div>
+        <div class="stufen-text">
+          <strong>Hauptfehler intern / Nebenfehler extern → Engineering</strong>
+          <span>Auswirkung auf Kunden, Produkt unter Kontrolle. Kostenfolgen &gt; 20 kFr. Produktionsstopp möglich.</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">1</div>
+        <div class="stufen-text">
+          <strong>Nebenfehler → Dokumentieren</strong>
+          <span>Keine Auswirkung beim Kunden. Kostenfolgen &lt; 20 kFr. Interne Korrektur ausreichend.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="skala-karte a-karte">
+      <h3><span class="skalen-badge">A</span>Auftreten → Dringlichkeit (mit E)</h3>
+      <div class="stufe">
+        <div class="stufen-nr">4</div>
+        <div class="stufen-text">
+          <strong>Nachgewiesen oder systematisch</strong>
+          <span>≥ 3 Fälle / 6 Mt. – ODER – Messung / Dokument belegt Fehler bereits heute</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">3</div>
+        <div class="stufen-text">
+          <strong>Wiederholungsfehler oder Normwert verletzt</strong>
+          <span>2 Fälle / 6 Mt. – ODER – Spezifikation oder Berechnung zeigt Anforderungsverletzung</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">2</div>
+        <div class="stufen-text">
+          <strong>Erstes Auftreten oder Nachweis fehlt</strong>
+          <span>1. Auftreten – ODER – Testnachweis älter als 3 Jahre oder nicht vorhanden</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">1</div>
+        <div class="stufen-text">
+          <strong>Kein Auftreten, aktueller Nachweis vorhanden</strong>
+          <span>Gültiger Prüfbericht (≤ 3 Jahre), keine Reklamation oder Feldrückmeldung</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="skala-karte e-karte">
+      <h3><span class="skalen-badge">E</span>Entdeckung → Dringlichkeit (mit A)</h3>
+      <div class="stufe">
+        <div class="stufen-nr">4</div>
+        <div class="stufen-text">
+          <strong>Keine Kontrolle vorhanden</strong>
+          <span>Kein definierter Prüfschritt, Test oder Review – Fehler erreicht Kunden unbemerkt</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">3</div>
+        <div class="stufen-text">
+          <strong>Kontrolle nicht dokumentiert oder nicht regelmässig</strong>
+          <span>Fehler kann auffallen, aber kein definierter, nachvollziehbarer Prüfprozess</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">2</div>
+        <div class="stufen-text">
+          <strong>Dokumentierter Prüfschritt, nicht lückenlos</strong>
+          <span>Stichproben oder partielle Tests – Fehler kann durchfallen</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">1</div>
+        <div class="stufen-text">
+          <strong>100% Kontrolle</strong>
+          <span>Jedes Stück wird geprüft oder Prozess schliesst Fehler konstruktiv aus</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="infozeile">
+    <strong title="Risikoprioritätszahl: A × E bestimmt Dringlichkeit, S bestimmt Eskalationsebene">RPZ</strong> = A × E &nbsp;·&nbsp; max. 16 &nbsp;·&nbsp; Eskalationsebene direkt aus S
+  </div>
+
+  <div class="steuerung">
+    <button class="btn-prim" onclick="zeileHinzu()">+ Zeile hinzufügen</button>
+    <button onclick="window.print()">Drucken / PDF</button>
+    <button onclick="exportCSV()">↓ CSV Export</button>
+    <button onclick="document.getElementById('csv-import-input').click()">↑ CSV Import</button>
+    <input type="file" id="csv-import-input" accept=".csv" style="display:none" onchange="importCSV(this)">
+    <button class="btn-ghost" onclick="alleLoeschen()">Alle Zeilen löschen</button>
+    <span id="zeilen-anzahl"></span>
+  </div>
+
+  <div class="tabelle-rahmen">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:24px">#</th>
+          <th style="min-width:140px">Fehlerart / Gap</th>
+          <th style="min-width:95px">Norm / Referenz</th>
+          <th style="min-width:95px">Bestehende Kontrolle</th>
+          <th style="width:32px"></th>
+          <th style="min-width:130px">Auswirkung</th>
+          <th style="min-width:90px">Ort des Fehlers</th>
+          <th class="th-s" style="width:44px">S</th>
+          <th class="th-a" style="width:44px">A</th>
+          <th class="th-e" style="width:44px">E</th>
+          <th class="th-rpz" style="width:54px" title="A × E = Dringlichkeit (max 16)">A×E</th><th style="min-width:80px">Dringlichkeit</th>
+          <th style="min-width:105px">Entscheid-Ebene</th>
+          <th style="min-width:128px">Begründung Bewertung</th>
+          <th style="min-width:138px">Massnahme</th>
+          <th style="min-width:88px">Verantwortlich</th>
+          <th style="min-width:82px">Termin</th>
+          <th style="min-width:80px">Status</th>
+          <th style="width:24px"></th>
+        </tr>
+      </thead>
+      <tbody id="fmea-body"></tbody>
+    </table>
+  </div>
+
+  <div class="zusammenfassung">
+    <div class="sum-pos"><span class="sum-label">Gaps total</span><span class="sum-wert c-blau" id="sum-total">0</span></div>
+    <div class="sum-pos"><span class="sum-label">S=4 Management</span><span class="sum-wert c-krit" id="sum-krit">0</span></div>
+    <div class="sum-pos"><span class="sum-label">S=3 Ressort</span><span class="sum-wert c-hoch" id="sum-hoch">0</span></div>
+    <div class="sum-pos"><span class="sum-label">S=2 Engineering</span><span class="sum-wert c-mit" id="sum-mitte">0</span></div>
+    <div class="sum-pos"><span class="sum-label">S=1 Dokumentieren</span><span class="sum-wert c-ger" id="sum-ger">0</span></div>
+    <div class="sum-pos"><span class="sum-label">Max A×E</span><span class="sum-wert" id="sum-max">—</span></div>
+    <div class="sum-pos"><span class="sum-label">Offen</span><span class="sum-wert c-krit" id="sum-offen">0</span></div>
+    <div class="sum-pos"><span class="sum-label">Abgeschlossen</span><span class="sum-wert c-ger" id="sum-zu">0</span></div>
+  </div>
+
+  <!-- WEGLEITUNG -->
+  <div style="margin-top:6px;padding:6px 12px;background:var(--grau-bg);border:1px solid var(--border);border-bottom:none;font-size:11px;color:var(--grau);">
+    Dringlichkeit der Massnahme (A×E): &nbsp;<strong style="color:#C00000">≥ 9 → Sofort</strong> &nbsp;|&nbsp; <strong style="color:var(--orange)">5–8 → innert 30 Tage</strong> &nbsp;|&nbsp; <strong style="color:var(--gruen)">≤ 4 → nächster Review-Zyklus</strong>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);">
+    <div style="background:var(--blau);color:white;padding:10px 14px;">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;opacity:0.7;margin-bottom:6px;">RPZ &lt; 4</div>
+      <div style="font-size:12px;font-weight:bold;margin-bottom:6px;">Dokumentieren &amp; überwachen</div>
+      <div style="font-size:11px;opacity:0.85;line-height:1.6;">
+        → ZI eröffnen<br>
+        → Befund festhalten<br>
+        → Periodisch prüfen
+      </div>
+    </div>
+    <div style="background:#E8F0E8;padding:10px 14px;border-left:1px solid var(--border);">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:var(--grau);margin-bottom:6px;">RPZ 4–11</div>
+      <div style="font-size:12px;font-weight:bold;color:var(--gruen);margin-bottom:6px;">Engineering-Massnahme</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.6;">
+        → ZI eröffnen<br>
+        → Massnahme, Verantwortlichen &amp; Termin definieren<br>
+        → Status nachverfolgen
+      </div>
+    </div>
+    <div style="background:#FFF8EE;padding:10px 14px;border-left:1px solid var(--border);">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:var(--grau);margin-bottom:6px;">RPZ 12–26</div>
+      <div style="font-size:12px;font-weight:bold;color:var(--orange);margin-bottom:6px;">Ressort-Entscheid</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.6;">
+        → ZI eröffnen<br>
+        → Massnahme, Verantwortlichen &amp; Termin definieren<br>
+        → Compliance Verantwortlichen informieren<br>
+        → R&amp;D Management einbeziehen &amp; Freigabe einholen
+      </div>
+    </div>
+    <div style="background:#FFF0F0;padding:10px 14px;border-left:1px solid var(--border);">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:var(--grau);margin-bottom:6px;">RPZ ≥ 27</div>
+      <div style="font-size:12px;font-weight:bold;color:#C00000;margin-bottom:6px;">Management-Entscheid</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.6;">
+        → ZI eröffnen<br>
+        → Massnahme, Verantwortlichen &amp; Termin definieren<br>
+        → Compliance Verantwortlichen informieren<br>
+        → R&amp;D Management einbeziehen &amp; Freigabe einholen<br>
+        → Produkt sperren bis Entscheid vorliegt<br>
+        → Namentliche Risikoakzeptanz durch Management
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── VORLAGE ────────────────────────────────────────────────────────────
+const VORLAGE = [
+  { id:1, gap:'PE-Leiterquerschnitt zu klein', norm:'IEC 60938-1 Anhang B Tab. B.1', kontrolle:'Kein Prüfprotokoll vorhanden',
+    auswirkungen: [
+      { id:1, text:'Überhitzung bei Nennstrom 16A → Brandgefahr', ort:'Feld / Endanwender', s:4, a:3, e:4, begruendung:'1mm² verbaut, Norm fordert 1.5mm² bei 16A – messtechnisch nachweisbar, kein Testnachweis.', massnahme:'Designänderung: 1.5mm² bei 16A, 2.5mm² bei 25A', verantwortlich:'', termin:'', status:'Offen' },
+      { id:2, text:'Personenschaden durch Lichtbogen bei Überlast', ort:'Feld / Endanwender', s:4, a:2, e:4, begruendung:'Überlastszenarien nicht getestet. Kein Nachweis dass Schutz greift bevor Lichtbogen entsteht.', massnahme:'Thermischer Test bei 4×Inenn dokumentieren', verantwortlich:'', termin:'', status:'Offen' }
+    ]
+  },
+  { id:2, gap:'CE-Kennzeichnung ohne Dokumentationsbasis', norm:'LVD 2014/35/EU, PrSG CH', kontrolle:'Keine',
+    auswirkungen: [
+      { id:3, text:'EU-Marktabzug durch Behörde', ort:'Behörde / Markt', s:3, a:3, e:4, begruendung:'CE auf Label seit >10 Jahren. Keine DoC, kein technisches Dossier.', massnahme:'CE entfernen oder vollständige DoC erstellen', verantwortlich:'', termin:'', status:'Offen' },
+      { id:4, text:'Strafrechtliche Relevanz für Verantwortliche', ort:'Behörde / Markt', s:4, a:3, e:4, begruendung:'Bewusste CE-Kennzeichnung ohne Grundlage ist in CH und EU strafbar.', massnahme:'Legal-Assessment beauftragen, Management informieren', verantwortlich:'', termin:'', status:'Offen' }
+    ]
+  }
+];
+
+let zeilen = [], nextId = 10, nextAuswId = 100;
+
+// Zwei-Logik-Prinzip:
+// S → Eskalationsebene (fix, unabhängig von A/E)
+// A×E → Dringlichkeit der Massnahme (max 16)
+
+const rpz = r => (r.a||0)*(r.e||0);   // Dringlichkeit max 16
+
+function dringKls(ae) {
+  if (ae >= 9)  return 'KRITISCH';    // sofort
+  if (ae >= 5)  return 'HOCH';        // innert 30 Tage
+  return 'GERING';                    // nächster Review
+}
+
+function entInfo(r) {
+  const s = r.s || 1;
+  // Eskalation aus S
+  if (s === 4) return ['Management-Entscheid', 'ent-GL'];
+  if (s === 3) return ['Ressort-Entscheid',    'ent-R'];
+  if (s === 2) return ['Engineering',          'ent-E'];
+  return ['Dokumentieren', 'ent-OK'];
+}
+
+function dringLabel(ae) {
+  if (ae >= 9) return 'Sofort';
+  if (ae >= 5) return '≤ 30 Tage';
+  return 'Review-Zyklus';
+}
+
+function aktualisiereKopf() {
+  const p = document.getElementById('meta-projekt').value;
+  const d = document.getElementById('meta-datum').value;
+  const n = document.getElementById('meta-doknr').value;
+  document.getElementById('kopf-projekt').textContent = p || 'Compliance FMEA';
+  const dCH = d ? d.split('-').reverse().join('.') : '';
+  document.getElementById('kopf-meta').textContent = [n, dCH].filter(Boolean).join(' · ');
+  speichern();
+}
+
+function speichern() {
+  const meta = {};
+  ['projekt','doknr','datum','autor','pruefer','freigabe','umfang'].forEach(k => {
+    const el = document.getElementById('meta-'+k);
+    if (el) meta[k] = el.value;
+  });
+  try { localStorage.setItem('sfmea8', JSON.stringify({zeilen, team, meta})); } catch(e){}
+}
+
+function laden() {
+  try {
+    const s = localStorage.getItem('sfmea8');
+    if (s) {
+      const d = JSON.parse(s);
+      zeilen = d.zeilen || [];
+      team   = d.team   || [];
+      nextId     = zeilen.length ? Math.max(...zeilen.map(r=>r.id))+1 : 10;
+      nextAuswId = zeilen.flatMap(z=>z.auswirkungen||[]).length ? Math.max(...zeilen.flatMap(z=>z.auswirkungen||[]).map(a=>a.id))+1 : 100;
+      nextTeamId = team.length ? Math.max(...team.map(t=>t.id))+1 : 1;
+      const m = d.meta || {};
+      ['projekt','doknr','datum','autor','pruefer','freigabe','umfang'].forEach(k => {
+        const el = document.getElementById('meta-'+k);
+        if (el && m[k] !== undefined) el.value = m[k];
+      });
+      return;
+    }
+  } catch(e){}
+  zeilen = [];
+  document.getElementById('meta-datum').value = new Date().toISOString().slice(0,10);
+  aktualisiereKopf();
+  render();
+}
+
+function vorlageladen() {
+  nextId = 10; nextAuswId = 100;
+  zeilen = JSON.parse(JSON.stringify(VORLAGE));
+  document.getElementById('meta-datum').value   = new Date().toISOString().slice(0,10);
+  document.getElementById('meta-projekt').value = 'DEN Drossel – Transfer VISTA';
+  document.getElementById('meta-doknr').value   = 'MGA-S-2026-DEN';
+  document.getElementById('meta-umfang').value  = 'Compliance-Analyse für 95 blockierte Artikel der DEN-Produktfamilie. Auslöser: fehlende Normnachweise und CE-Kennzeichnung ohne Basis.';
+  aktualisiereKopf(); render();
+}
+
+function alleLoeschen() {
+  if (confirm('Alle Gaps löschen?')) { zeilen = []; speichern(); render(); }
+}
+
+function zeileHinzu() {
+  zeilen.push({ id: nextId++, gap:'', norm:'', kontrolle:'',
+    auswirkungen:[{ id: nextAuswId++, text:'', ort:'', s:2, a:2, e:2, begruendung:'', massnahme:'', verantwortlich:'', termin:'', status:'Offen' }]
+  });
+  speichern(); render();
+  setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),50);
+}
+
+function loescheZeile(id) {
+  if (!confirm('Gap und alle zugehörigen Auswirkungen löschen?')) return;
+  zeilen = zeilen.filter(r=>r.id!==id); speichern(); render();
+}
+
+function auswirkungHinzu(gapId) {
+  const z = zeilen.find(r=>r.id===gapId);
+  if (!z) return;
+  z.auswirkungen.push({ id: nextAuswId++, text:'', s:2, a:2, e:2, begruendung:'', massnahme:'', verantwortlich:'', termin:'', status:'Offen' });
+  speichern(); render();
+}
+
+function loescheAuswirkung(gapId, awId) {
+  const z = zeilen.find(r=>r.id===gapId);
+  if (!z || z.auswirkungen.length <= 1) return;
+  z.auswirkungen = z.auswirkungen.filter(a=>a.id!==awId);
+  speichern(); render();
+}
+
+function updGap(id, feld, wert) {
+  const z = zeilen.find(r=>r.id===id);
+  if (z) { z[feld] = wert; speichern(); }
+}
+
+function updAusw(gapId, awId, feld, wert) {
+  const z = zeilen.find(r=>r.id===gapId);
+  if (!z) return;
+  const a = z.auswirkungen.find(a=>a.id===awId);
+  if (!a) return;
+  a[feld] = ['s','a','e'].includes(feld) ? +wert : wert;
+  speichern();
+  if (['s','a','e'].includes(feld)) render(); else aktualisiereSum();
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function opt(arr, val) {
+  return arr.map(v=>`<option value="${v}" ${v==val?'selected':''}>${v}</option>`).join('');
+}
+
+function render() {
+  const tb = document.getElementById('fmea-body');
+  tb.innerHTML = '';
+  const stufen = [1,2,3,4];
+  let gapNr = 0;
+
+  zeilen.forEach(z => {
+    gapNr++;
+    const awCount = z.auswirkungen.length;
+
+    z.auswirkungen.forEach((a, ai) => {
+      const ae = rpz(a), kls = dringKls(ae), [el, ec] = entInfo(a);
+      const sc = 'st-'+(a.status||'Offen').replace(/ /g,'-');
+      const tr = document.createElement('tr');
+
+      const gapCells = ai === 0 ? `
+        <td class="zeilen-nr" rowspan="${awCount}" style="vertical-align:middle;background:#EBF1F8;border-right:2px solid var(--blau);">${gapNr}</td>
+        <td rowspan="${awCount}" style="background:#EBF1F8;border-right:1px solid var(--border);vertical-align:top;">
+          <textarea rows="3" onchange="updGap(${z.id},'gap',this.value)" style="min-width:130px;font-weight:bold;">${esc(z.gap)}</textarea>
+        </td>
+        <td rowspan="${awCount}" style="background:#EBF1F8;border-right:1px solid var(--border);vertical-align:top;">
+          <textarea rows="2" onchange="updGap(${z.id},'norm',this.value)" style="min-width:85px;">${esc(z.norm)}</textarea>
+        </td>
+        <td rowspan="${awCount}" style="background:#EBF1F8;border-right:1px solid var(--border);vertical-align:top;">
+          <textarea rows="2" onchange="updGap(${z.id},'kontrolle',this.value)" style="min-width:85px;">${esc(z.kontrolle)}</textarea>
+        </td>
+        <td rowspan="${awCount}" style="background:#EBF1F8;border-right:2px solid var(--blau-hell);vertical-align:middle;text-align:center;">
+          <button onclick="auswirkungHinzu(${z.id})" title="Auswirkung hinzufügen"
+            style="font-size:18px;background:none;border:none;color:var(--blau);cursor:pointer;line-height:1;display:block;margin:0 auto 6px;">+</button>
+          <button class="del-btn" onclick="loescheZeile(${z.id})" title="Gap löschen">✕</button>
+        </td>` : '';
+
+      tr.innerHTML = `
+        ${gapCells}
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}">
+          <textarea rows="2" onchange="updAusw(${z.id},${a.id},'text',this.value)" style="min-width:130px;" placeholder="Auswirkung beschreiben...">${esc(a.text)}</textarea>
+        </td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}">
+          <select onchange="updAusw(${z.id},${a.id},'ort',this.value)"
+            style="border:1px solid var(--border);font-family:Arial,Helvetica,sans-serif;font-size:11px;width:100%;padding:4px 3px;outline:none;background:white;cursor:pointer;">
+            ${opt(['','Intern','Wareneingang Kunde','Assembly beim Kunden','Feld / Endanwender','Behörde / Markt'],a.ort||'')}
+          </select>
+        </td>
+        <td style="text-align:center;border-top:${ai>0?'1px dashed #DDD':'none'}"><select class="score-sel score-s" onchange="updAusw(${z.id},${a.id},'s',this.value)">${opt(stufen,a.s)}</select></td>
+        <td style="text-align:center;border-top:${ai>0?'1px dashed #DDD':'none'}"><select class="score-sel score-a" onchange="updAusw(${z.id},${a.id},'a',this.value)">${opt(stufen,a.a)}</select></td>
+        <td style="text-align:center;border-top:${ai>0?'1px dashed #DDD':'none'}"><select class="score-sel score-e" onchange="updAusw(${z.id},${a.id},'e',this.value)">${opt(stufen,a.e)}</select></td>
+        <td style="text-align:center;border-top:${ai>0?'1px dashed #DDD':'none'}"><span class="rpz-badge rpz-${kls}">${ae}</span></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><span class="${ec}">${el}</span></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><textarea rows="2" class="begr-feld" onchange="updAusw(${z.id},${a.id},'begruendung',this.value)" style="min-width:110px;" placeholder="Faktum nennen – nicht Meinung">${esc(a.begruendung)}</textarea></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><textarea rows="2" onchange="updAusw(${z.id},${a.id},'massnahme',this.value)" style="min-width:120px;">${esc(a.massnahme)}</textarea></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><input type="text" value="${esc(a.verantwortlich)}" onchange="updAusw(${z.id},${a.id},'verantwortlich',this.value)" style="min-width:72px;"></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><input type="date" value="${esc(a.termin)}" onchange="updAusw(${z.id},${a.id},'termin',this.value)"></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><select class="${sc}" onchange="updAusw(${z.id},${a.id},'status',this.value)">${opt(['Offen','In Bearbeitung','Abgeschlossen'],a.status)}</select></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}">${awCount > 1 ? `<button class="del-btn" onclick="loescheAuswirkung(${z.id},${a.id})" title="Auswirkung löschen" style="font-size:12px;">−</button>` : ''}</td>`;
+      tb.appendChild(tr);
+    });
+
+    // Trennlinie nach jedem Gap
+    const sep = document.createElement('tr');
+    sep.innerHTML = `<td colspan="16" style="height:4px;background:var(--blau);padding:0;border:none;"></td>`;
+    tb.appendChild(sep);
+  });
+
+  aktualisiereSum();
+  document.getElementById('zeilen-anzahl').textContent = `${zeilen.length} Gap${zeilen.length!==1?'s':''}`;
+}
+
+function aktualisiereSum() {
+  const alleAusw = zeilen.flatMap(z=>z.auswirkungen||[]);
+  const ae = alleAusw.map(a=>rpz(a));
+  document.getElementById('sum-total').textContent = zeilen.length;
+  document.getElementById('sum-krit').textContent  = alleAusw.filter(a=>(a.s||1)===4).length;
+  document.getElementById('sum-hoch').textContent  = alleAusw.filter(a=>(a.s||1)===3).length;
+  document.getElementById('sum-mitte').textContent = alleAusw.filter(a=>(a.s||1)===2).length;
+  document.getElementById('sum-ger').textContent   = alleAusw.filter(a=>(a.s||1)===1).length;
+  document.getElementById('sum-max').textContent   = ae.length ? Math.max(...ae) : '—';
+  document.getElementById('sum-offen').textContent  = alleAusw.filter(a=>a.status==='Offen').length;
+  document.getElementById('sum-zu').textContent     = alleAusw.filter(a=>a.status==='Abgeschlossen').length;
+}
+
+function exportCSV() {
+  const kopf = ['Gap#','Fehlerart / Gap','Norm / Referenz','Bestehende Kontrolle','Auswirkung','Ort des Fehlers','S','A','E','A×E Dringlichkeit','Dringlichkeit','Entscheid-Ebene','Begründung','Massnahme','Verantwortlich','Termin','Status'];
+  const z = [kopf.join(';')];
+  zeilen.forEach((r,i) => {
+    (r.auswirkungen||[]).forEach(a => {
+      const [el] = entInfo(a);
+      z.push([i+1,`"${(r.gap||'').replace(/"/g,'""')}"`,`"${(r.norm||'').replace(/"/g,'""')}"`,`"${(r.kontrolle||'').replace(/"/g,'""')}"`,`"${(a.text||'').replace(/"/g,'""')}"`,`"${(a.ort||'').replace(/"/g,'""')}"`,a.s,a.a,a.e,rpz(a),dringLabel(rpz(a)),el,`"${(a.begruendung||'').replace(/"/g,'""')}"`,`"${(a.massnahme||'').replace(/"/g,'""')}"`,`"${(a.verantwortlich||'').replace(/"/g,'""')}"`,a.termin,a.status].join(';'));
+    });
+  });
+  const anchor = document.createElement('a');
+  anchor.href = URL.createObjectURL(new Blob(['\uFEFF'+z.join('\n')],{type:'text/csv;charset=utf-8'}));
+  anchor.download = `ComplianceFMEA_${(document.getElementById('meta-projekt').value||'FMEA').replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.csv`;
+  anchor.click();
+}
+
+// ── TEAM ──────────────────────────────────────────────────────────────
+let team = [], nextTeamId = 1;
+const ROLLEN = ['Moderation','Analyse','Engineering','Quality / Compliance','Product Management','Freigabe (Management)','Beobachter'];
+
+function teamZeileHinzu() {
+  team.push({ id: nextTeamId++, name:'', abteilung:'', rolle:'Analyse' });
+  speichern(); renderTeam();
+}
+
+function loescheTeam(id) {
+  team = team.filter(t=>t.id!==id); speichern(); renderTeam();
+}
+
+function updTeam(id, feld, wert) {
+  const t = team.find(t=>t.id===id);
+  if (t) { t[feld] = wert; speichern(); }
+}
+
+function renderTeam() {
+  const liste = document.getElementById('team-liste');
+  liste.innerHTML = '';
+  team.forEach(t => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:center;';
+    row.innerHTML = `
+      <input type="text" value="${esc(t.name)}" placeholder="Name" onchange="updTeam(${t.id},'name',this.value)"
+        style="border:1px solid var(--border);padding:5px 7px;font-family:Arial,Helvetica,sans-serif;font-size:12px;outline:none;">
+      <input type="text" value="${esc(t.abteilung)}" placeholder="z.B. R&D Engineering" onchange="updTeam(${t.id},'abteilung',this.value)"
+        style="border:1px solid var(--border);padding:5px 7px;font-family:Arial,Helvetica,sans-serif;font-size:12px;outline:none;">
+      <select onchange="updTeam(${t.id},'rolle',this.value)"
+        style="border:1px solid var(--border);padding:5px 7px;font-family:Arial,Helvetica,sans-serif;font-size:12px;outline:none;background:var(--weiss);">
+        ${ROLLEN.map(r=>`<option value="${r}" ${r===t.rolle?'selected':''}>${r}</option>`).join('')}
+      </select>
+      <button class="del-btn" onclick="loescheTeam(${t.id})" title="Entfernen">✕</button>`;
+    liste.appendChild(row);
+  });
+}
+
+function importCSV(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l);
+      if (lines.length < 2) { alert('Keine Daten gefunden.'); return; }
+
+      // Parse CSV respecting quoted fields
+      function parseRow(line) {
+        const fields = [];
+        let cur = '', inQ = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          if (ch === '"') { inQ = !inQ; }
+          else if (ch === ';' && !inQ) { fields.push(cur.trim()); cur = ''; }
+          else { cur += ch; }
+        }
+        fields.push(cur.trim());
+        return fields;
+      }
+
+      // Expected columns (from exportCSV):
+      // Gap#, Fehlerart/Gap, Norm, Kontrolle, Auswirkung, Ort, S, A, E, RPZ, Entscheid, Begründung, Massnahme, Verantwortlich, Termin, Status
+      const COL = { gap:1, norm:2, kontrolle:3, text:4, ort:5, s:6, a:7, e:8, begr:11, mass:12, ver:13, ter:14, stat:15 };
+
+      const newZeilen = [];
+      let curGapNr = null, curZeile = null;
+      nextId = 100; nextAuswId = 200;
+
+      for (let i = 1; i < lines.length; i++) {
+        const f = parseRow(lines[i]);
+        if (f.length < 10) continue;
+        const gapNr = f[0];
+        if (gapNr !== curGapNr) {
+          curGapNr = gapNr;
+          curZeile = {
+            id: nextId++,
+            gap: f[COL.gap] || '',
+            norm: f[COL.norm] || '',
+            kontrolle: f[COL.kontrolle] || '',
+            auswirkungen: []
+          };
+          newZeilen.push(curZeile);
+        }
+        curZeile.auswirkungen.push({
+          id: nextAuswId++,
+          text:         f[COL.text]  || '',
+          ort:          f[COL.ort]   || '',
+          s:    parseInt(f[COL.s])   || 2,
+          a:    parseInt(f[COL.a])   || 2,
+          e:    parseInt(f[COL.e])   || 2,
+          begruendung:  f[COL.begr]  || '',
+          massnahme:    f[COL.mass]  || '',
+          verantwortlich: f[COL.ver] || '',
+          termin:       f[COL.ter]   || '',
+          status:       f[COL.stat]  || 'Offen'
+        });
+      }
+
+      if (newZeilen.length === 0) { alert('Import fehlgeschlagen – Format nicht erkannt.'); return; }
+      zeilen = newZeilen;
+      speichern();
+      render();
+      alert(`${newZeilen.length} Gap(s) mit ${newZeilen.flatMap(z=>z.auswirkungen).length} Auswirkung(en) importiert.`);
+    } catch(err) {
+      alert('Fehler beim Import: ' + err.message);
+    }
+    input.value = '';
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+laden();
+aktualisiereKopf();
+renderTeam();
+render();
+</script>
+</body>
+</html>
