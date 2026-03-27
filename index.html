@@ -1,0 +1,1955 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compliance FMEA – SCHURTER</title>
+<style>
+  :root {
+    --blau:       #1B4F8A;
+    --blau-hell:  #2E6DA4;
+    --blau-bg:    #EBF1F8;
+    --rot:        #E2001A;
+    --grau-dk:    #3C3C3C;
+    --grau:       #6F6F6F;
+    --grau-hell:  #D4D4D4;
+    --grau-bg:    #F4F4F4;
+    --border:     #CCCCCC;
+    --weiss:      #FFFFFF;
+    --text:       #1A1A1A;
+    --orange:     #C85A00;
+    --gruen:      #1E6B1E;
+    --gelb:       #7A6000;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #E2E8F0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  /* ══ KOPFZEILE ══════════════════════════════════════════════════════ */
+  .kopf {
+    background: var(--blau);
+    border-bottom: 3px solid var(--blau-hell);
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo-bereich { display: flex; align-items: center; gap: 14px; }
+
+  .logo-kasten {
+    background: var(--weiss);
+    color: var(--blau);
+    font-weight: bold;
+    font-size: 13px;
+    padding: 4px 10px;
+    letter-spacing: 2px;
+    line-height: 1.4;
+  }
+
+  .logo-sub {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+    font-weight: normal;
+    display: block;
+    margin-top: 1px;
+  }
+
+  .dok-titel { font-size: 17px; font-weight: bold; color: var(--weiss); }
+  .dok-sub   { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+
+  .kopf-rechts { text-align: right; font-size: 11px; color: rgba(255,255,255,0.7); }
+  .kopf-rechts .projekt { font-size: 13px; font-weight: bold; color: var(--weiss); margin-bottom: 3px; }
+
+
+
+  /* ══ INHALT ═════════════════════════════════════════════════════════ */
+  .inhalt { padding: 20px 32px; }
+
+  /* ══ BLOCK ══════════════════════════════════════════════════════════ */
+  .block {
+    background: var(--weiss);
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--blau);
+    padding: 16px 20px;
+    margin-bottom: 16px;
+  }
+
+  .block-titel {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--blau);
+    border-bottom: 1px solid var(--grau-hell);
+    padding-bottom: 7px;
+    margin-bottom: 13px;
+  }
+
+  /* ══ FORMULAR ═══════════════════════════════════════════════════════ */
+  .formgitter {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 11px 18px;
+  }
+
+  .feld { display: flex; flex-direction: column; gap: 3px; }
+
+  .feld label {
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--grau);
+  }
+
+  .feld input, .feld select, .feld textarea {
+    border: 1px solid var(--border);
+    padding: 5px 7px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    color: var(--text);
+    background: var(--weiss);
+    outline: none;
+    width: 100%;
+    transition: border-color 0.15s;
+  }
+
+  .feld input:focus, .feld select:focus, .feld textarea:focus {
+    border-color: var(--blau);
+  }
+
+  .feld-voll { grid-column: 1 / -1; }
+
+  /* ══ SKALENKARTEN ═══════════════════════════════════════════════════ */
+  .skalen-raster {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .skala-karte {
+    background: var(--weiss);
+    border: 1px solid var(--border);
+    padding: 13px 15px;
+  }
+
+  .skala-karte.s-karte { border-top: 3px solid #C00000; }
+  .skala-karte.a-karte { border-top: 3px solid var(--orange); }
+  .skala-karte.e-karte { border-top: 3px solid var(--blau); }
+
+  .skala-karte h3 {
+    font-size: 11px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .skalen-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px; height: 22px;
+    color: var(--weiss);
+    font-size: 12px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .s-karte .skalen-badge { background: #C00000; }
+  .a-karte .skalen-badge { background: var(--orange); }
+  .e-karte .skalen-badge { background: var(--blau); }
+
+  .stufe {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 5px;
+    padding: 5px 0;
+    border-bottom: 1px solid var(--grau-bg);
+    font-size: 12px;
+    align-items: start;
+  }
+  .stufe:last-child { border-bottom: none; }
+
+  .stufen-nr {
+    font-weight: bold;
+    font-size: 17px;
+    line-height: 1.1;
+    text-align: center;
+  }
+  .s-karte .stufen-nr { color: #C00000; }
+  .a-karte .stufen-nr { color: var(--orange); }
+  .e-karte .stufen-nr { color: var(--blau); }
+
+  .stufen-text strong { display: block; font-size: 11px; font-weight: bold; margin-bottom: 1px; }
+  .stufen-text span   { color: var(--grau); font-size: 11px; }
+
+  /* ══ INFOZEILE ══════════════════════════════════════════════════════ */
+  .infozeile {
+    background: var(--blau-bg);
+    border-left: 4px solid var(--blau);
+    padding: 9px 14px;
+    font-size: 12px;
+    margin-bottom: 14px;
+    color: var(--text);
+  }
+  .infozeile strong { color: var(--blau); }
+
+  /* ══ SCHWELLENREGEL ═════════════════════════════════════════════════ */
+  .schwelle {
+    background: #F0F4FA;
+    border: 1px solid #C0D0E8;
+    border-left: 4px solid var(--blau);
+    padding: 10px 16px;
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  .schwelle strong { color: var(--blau); }
+
+  /* ══ STEUERUNG ══════════════════════════════════════════════════════ */
+  .steuerung { display: flex; gap: 8px; margin-bottom: 13px; flex-wrap: wrap; align-items: center; }
+
+  button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 11px;
+    font-weight: bold;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    background: var(--weiss);
+    color: var(--text);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    transition: all 0.1s;
+  }
+  button:hover { border-color: var(--blau); color: var(--blau); }
+  button.btn-prim { background: var(--blau); color: var(--weiss); border-color: var(--blau); }
+  button.btn-prim:hover { background: #153f70; color: var(--weiss); }
+  button.btn-ghost { color: var(--grau); font-weight: normal; }
+
+  #zeilen-anzahl { font-size: 11px; color: var(--grau); margin-left: 4px; }
+
+  /* ══ TABELLE ════════════════════════════════════════════════════════ */
+  .tabelle-rahmen {
+    background: var(--weiss);
+    border: 1px solid var(--border);
+    overflow-x: auto;
+    margin-bottom: 16px;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead tr { background: var(--blau); color: var(--weiss); }
+
+  th {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 9px 10px;
+    text-align: left;
+    white-space: nowrap;
+    border-right: 1px solid #2a5f9a;
+  }
+  th:last-child { border-right: none; }
+  th.th-s   { background: #8B0010; }
+  th.th-a   { background: #8B3800; }
+  th.th-e   { background: #0D3060; }
+  th.th-rpz { background: #111827; }
+
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:nth-child(even) { background: #FAFBFC; }
+  tbody tr:hover { background: var(--blau-bg); }
+
+  td {
+    padding: 7px 9px;
+    vertical-align: top;
+    border-right: 1px solid #ECECEC;
+  }
+  td:last-child { border-right: none; }
+
+  td input, td textarea, td select {
+    background: transparent;
+    border: 1px solid transparent;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: var(--text);
+    width: 100%;
+    padding: 2px 3px;
+    outline: none;
+    resize: vertical;
+    transition: border-color 0.1s;
+    overflow: hidden;
+    min-height: 40px;
+  }
+  td input:focus, td textarea:focus, td select:focus {
+    border-color: var(--blau);
+    background: var(--weiss);
+  }
+
+  .score-sel {
+    font-weight: bold;
+    font-size: 14px;
+    text-align: center;
+    width: 50px !important;
+    cursor: pointer;
+  }
+  .score-s { color: #C00000; }
+  .score-a { color: var(--orange); }
+  .score-e { color: var(--blau); }
+
+  /* Begründungsfeld – Toyota DRBFM */
+  .begr-feld {
+    border-left: 2px solid var(--grau-hell) !important;
+    padding-left: 5px !important;
+    font-style: italic;
+    color: var(--grau) !important;
+    font-size: 11px !important;
+  }
+  .begr-feld:focus {
+    border-left-color: var(--blau) !important;
+    color: var(--text) !important;
+    font-style: normal;
+  }
+
+  /* RPZ Badges */
+  .rpz-badge {
+    display: inline-block;
+    padding: 3px 7px;
+    font-weight: bold;
+    font-size: 14px;
+    min-width: 42px;
+    text-align: center;
+    border: 2px solid;
+  }
+  .rpz-KRITISCH { color: #C00000; border-color: #C00000; background: #FFF0F0; }
+  .rpz-HOCH     { color: var(--orange); border-color: var(--orange); background: #FFF5EC; }
+  .rpz-MITTEL   { color: var(--gelb);   border-color: #C8A800;       background: #FFFBE0; }
+  .rpz-GERING   { color: var(--gruen);  border-color: var(--gruen);  background: #F0FFF0; }
+
+  /* Entscheid */
+  .ent-GL { color: #C00000;      font-weight: bold; font-size: 11px; }
+  .ent-R  { color: var(--orange); font-weight: bold; font-size: 11px; }
+  .ent-E  { color: var(--gelb);   font-weight: bold; font-size: 11px; }
+  .ent-OK { color: var(--gruen);              font-size: 11px; }
+
+  /* Status */
+  .st-Offen          { color: #C00000;      font-weight: bold; }
+  .st-In-Bearbeitung { color: var(--orange); font-weight: bold; }
+  .st-Abgeschlossen  { color: var(--gruen); }
+
+  .zeilen-nr { font-size: 11px; color: var(--grau); font-weight: bold; text-align: center; }
+
+  .del-btn {
+    background: none; border: none;
+    color: var(--grau-hell); cursor: pointer;
+    font-size: 14px; padding: 0 3px;
+    transition: color 0.1s;
+  }
+  .del-btn:hover { color: var(--rot); border: none; }
+
+  /* ══ ZUSAMMENFASSUNG ════════════════════════════════════════════════ */
+  .zusammenfassung {
+    background: var(--weiss);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blau);
+    padding: 13px 20px;
+    display: flex;
+    gap: 26px;
+    flex-wrap: wrap;
+  }
+
+  .sum-pos { display: flex; flex-direction: column; gap: 2px; }
+  .sum-label { font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: var(--grau); }
+  .sum-wert  { font-size: 20px; font-weight: bold; }
+  .c-krit { color: #C00000; }
+  .c-hoch { color: var(--orange); }
+  .c-mit  { color: var(--gelb); }
+  .c-ger  { color: var(--gruen); }
+  .c-blau { color: var(--blau); }
+
+  [title] { cursor: help; border-bottom: 1px dotted var(--grau-hell); }
+
+  /* Risikomatrix */
+  .matrix-zelle {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 44px;
+    font-weight: bold;
+    font-size: 10px;
+    text-align: center;
+    line-height: 1.2;
+    border: 2px solid rgba(0,0,0,0.15);
+    cursor: default;
+  }
+  .matrix-zelle .mz-label { font-size: 9px; font-weight: normal; margin-top: 1px; }
+
+  .mz-1 { background:#E8F5E9; color:#1B5E20; }   /* extrem gering */
+  .mz-2 { background:#F1F8E9; color:#33691E; }   /* sehr gering   */
+  .mz-3 { background:#FFF9C4; color:#F57F17; }   /* gering        */
+  .mz-4 { background:#FFE082; color:#E65100; }   /* mittel        */
+  .mz-5 { background:#FFCC80; color:#BF360C; }   /* hoch          */
+  .mz-6 { background:#EF9A9A; color:#B71C1C; }   /* sehr hoch     */
+  .mz-7 { background:#C62828; color:#FFFFFF; }   /* extrem hoch   */
+
+  /* Mini-Matrix popup on hover */
+  .matrix-wrap { position:relative; display:inline-block; }
+  .matrix-popup {
+    display: none;
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 1px solid var(--border);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    padding: 8px;
+    z-index: 200;
+    min-width: 260px;
+  }
+  .matrix-wrap:hover .matrix-popup { display: block; }
+  .matrix-popup table { border-collapse: collapse; font-size: 9px; }
+  .matrix-popup th, .matrix-popup td { padding: 2px 4px; text-align: center; border: 1px solid #ddd; }
+  .matrix-popup .mp-title { font-size: 10px; font-weight: bold; color: var(--blau); margin-bottom: 4px; }
+
+  /* Tooltip */
+  .tt { position: relative; display: inline-block; width: 100%; }
+  .tt input, .tt textarea, .tt select { width: 100%; }
+  .tt .tt-text {
+    visibility: hidden;
+    opacity: 0;
+    background: var(--dunkel, #3C3C3C);
+    color: white;
+    font-size: 11px;
+    font-weight: normal;
+    text-align: left;
+    padding: 5px 9px;
+    border-radius: 0;
+    position: absolute;
+    z-index: 100;
+    bottom: calc(100% + 4px);
+    left: 0;
+    white-space: normal;
+    min-width: 180px;
+    max-width: 280px;
+    line-height: 1.4;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  }
+  .tt:hover .tt-text { visibility: visible; opacity: 1; }
+  .print-text { display: none; }
+  .print-score { display: none; }
+
+  @media print {
+    @page {
+      size: A4 landscape;
+      margin: 8mm 8mm 8mm 8mm;
+    }
+
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+    html, body {
+      background: white !important;
+      font-size: 8px !important;
+      font-family: Arial, Helvetica, sans-serif !important;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* ── Hide screen-only elements ── */
+    .steuerung,
+    button,
+    .del-btn,
+    .skalen-raster,
+    .zwei-logik-hinweis,
+    .infozeile,
+    .schwelle,
+    .matrix-popup,
+    #bubble-chart,
+    canvas {
+      display: none !important;
+    }
+
+    /* ── Layout ── */
+    .kopf { padding: 5px 10px; }
+    .kopf .logo-kasten { font-size: 11px; padding: 3px 7px; }
+    .dok-titel { font-size: 13px; }
+    .dok-sub { font-size: 9px; }
+    .kopf-rechts { font-size: 9px; }
+    .kopf-rechts .projekt { font-size: 11px; }
+
+    .inhalt { padding: 6px 10px; }
+
+    .block {
+      padding: 8px 10px;
+      margin-bottom: 8px;
+      border-top-width: 2px;
+    }
+    .block-titel { font-size: 9px; padding-bottom: 4px; margin-bottom: 7px; }
+
+    /* ── Dokumentkopf: Felder als kompaktes Grid ── */
+    .formgitter {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px 10px;
+    }
+    .feld label { font-size: 8px; }
+    .feld input, .feld select, .feld textarea {
+      display: none;
+    }
+    .feld .print-text {
+      display: block !important;
+      font-size: 9px;
+      border-bottom: 1px solid var(--grau-hell);
+      padding-bottom: 1px;
+      min-height: 12px;
+      word-break: break-word;
+    }
+    /* Textarea (Analysegegenstand) */
+    .feld-voll {
+      grid-column: 1 / -1;
+    }
+
+    /* ── Team: kompakt ── */
+    #team-liste > div {
+      grid-template-columns: 1fr 1fr 1fr !important;
+      font-size: 8px;
+    }
+    #team-liste input,
+    #team-liste select {
+      display: none !important;
+    }
+    #team-liste .print-text {
+      display: block !important;
+      font-size: 8px;
+    }
+
+    /* ── Zusammenfassung ── */
+    .zusammenfassung {
+      padding: 5px 10px;
+      gap: 14px;
+    }
+    .sum-label { font-size: 8px; }
+    .sum-wert  { font-size: 14px; }
+
+    /* ── Tabelle ── */
+    .tabelle-rahmen {
+      overflow: visible;
+      border: 1px solid var(--border);
+    }
+
+    table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
+      page-break-inside: auto;
+      font-size: 7.5px;
+    }
+
+    thead { display: table-header-group; }
+
+    th {
+      font-size: 7px !important;
+      padding: 3px 3px !important;
+      white-space: normal;
+      word-break: break-word;
+      line-height: 1.2;
+    }
+
+    td {
+      padding: 3px 3px !important;
+      font-size: 7.5px !important;
+      vertical-align: top;
+      word-break: break-word;
+    }
+
+    tr { page-break-inside: avoid; }
+
+    /* Spaltenbreiten für A4 Landscape (ca. 277mm nutzbar) */
+    table colgroup { display: none; }
+    th:nth-child(1)  { width: 14px; }   /* # */
+    th:nth-child(2)  { width: 11%; }    /* Gap */
+    th:nth-child(3)  { width: 8%; }     /* Norm */
+    th:nth-child(4)  { width: 8%; }     /* Kontrolle */
+    .th-gap-actions { display: none; }
+    th:nth-child(6)  { width: 10%; }    /* Auswirkung */
+    th:nth-child(7)  { width: 7%; }     /* Ort */
+    th:nth-child(8)  { width: 16px; }   /* S */
+    th:nth-child(9)  { width: 16px; }   /* A */
+    th:nth-child(10) { width: 16px; }   /* E */
+    th:nth-child(11) { width: 40px; }   /* Risiko */
+    th:nth-child(12) { width: 7%; }     /* Entscheid */
+    th:nth-child(13) { width: 11%; }    /* Begründung */
+    th:nth-child(14) { width: 11%; }    /* Massnahme */
+    th:nth-child(15) { width: 7%; }     /* Restrisiko */
+    th:nth-child(16) { width: 6%; }     /* Verantwortlich */
+    th:nth-child(17) { width: 5%; }     /* Datum */
+    th:nth-child(18) { width: 5%; }     /* Status */
+    .th-del-btn     { display: none; }
+
+    .td-gap-actions { display: none !important; }
+    .td-del-btn     { display: none !important; }
+
+    /* Hide interactive elements, show print text */
+    td textarea,
+    td input[type="text"],
+    td input[type="date"],
+    td select:not(.print-status-text) {
+      display: none !important;
+    }
+
+    .print-text {
+      display: block !important;
+      font-size: 7.5px !important;
+      line-height: 1.35;
+      word-break: break-word;
+    }
+
+    .score-sel { display: none !important; }
+    .print-score {
+      display: inline !important;
+      font-weight: bold;
+      font-size: 10px;
+    }
+
+    /* Risiko-Badge für Druck */
+    .matrix-wrap { position: static; }
+    .matrix-zelle {
+      width: auto;
+      height: auto;
+      padding: 2px 4px;
+      font-size: 9px;
+      border-width: 1px;
+    }
+    .mz-label { font-size: 7px; }
+
+    /* RPZ Badge */
+    .rpz-badge {
+      font-size: 10px;
+      padding: 1px 4px;
+      min-width: 24px;
+      border-width: 1px;
+    }
+
+    /* Entscheid-Text */
+    .ent-GL, .ent-R, .ent-E, .ent-OK {
+      font-size: 8px;
+    }
+
+    /* Gap-Trennlinie */
+    tr td[colspan="15"] {
+      height: 2px !important;
+    }
+
+    /* Aktionswegleitung */
+    .aktions-wegleitung > div {
+      font-size: 8px;
+      padding: 6px 8px;
+    }
+
+    /* Bubble chart Bereich komplett ausblenden */
+    .bubble-section { display: none !important; }
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="kopf">
+  <div class="logo-bereich">
+    <div class="logo-kasten">
+      SCHURTER
+      <span class="logo-sub">ELECTRONIC COMPONENTS</span>
+    </div>
+    <div>
+      <div class="dok-titel">Compliance FMEA</div>
+      <div class="dok-sub">Fehlerarten- und Auswirkungsanalyse – Compliance &amp; Produktsicherheit</div>
+    </div>
+  </div>
+  <div class="kopf-rechts">
+    <div class="projekt" id="kopf-projekt">Compliance FMEA</div>
+    <div id="kopf-meta"></div>
+  </div>
+</div>
+
+<div class="inhalt">
+
+  <!-- DOKUMENTKOPF -->
+  <div class="block">
+    <div class="block-titel">Dokumentkopf</div>
+    <div class="formgitter">
+      <div class="feld">
+        <label>Projekt / Produkt *</label>
+        <input type="text" id="meta-projekt" placeholder="z.B. DEN Drossel – Transfer VISTA" oninput="aktualisiereKopf()" title="Produktname und Projekttitel – wird im Kopfbalken angezeigt">
+        <span class="print-text" id="print-projekt"></span>
+      </div>
+      <div class="feld">
+        <label>Artikelnummer</label>
+        <input type="text" id="meta-doknr" placeholder="z.B. MGA-S" oninput="aktualisiereKopf()" title="Schurter Artikelnummer oder Dokumentnummer (MGA-S)">
+        <span class="print-text" id="print-doknr"></span>
+      </div>
+      <div class="feld">
+        <label>Datum *</label>
+        <input type="date" id="meta-datum" oninput="aktualisiereKopf()">
+        <span class="print-text" id="print-datum"></span>
+      </div>
+      <div class="feld">
+        <label>Erstellt von *</label>
+        <input type="text" id="meta-autor" placeholder="Name, Abteilung" oninput="aktualisiereKopf()" title="Person die diese FMEA erstellt hat, inkl. Abteilung">
+        <span class="print-text" id="print-autor"></span>
+      </div>
+      <div class="feld">
+        <label>Geprüft von</label>
+        <input type="text" id="meta-pruefer" placeholder="Name" oninput="aktualisiereKopf()" title="Person die den Inhalt fachlich geprüft hat">
+        <span class="print-text" id="print-pruefer"></span>
+      </div>
+      <div class="feld">
+        <label>Quality Verantwortlicher *</label>
+        <input type="text" id="meta-quality" placeholder="Name" oninput="aktualisiereKopf()" style="border-color:var(--blau)" title="Quality ist Compliance-Hüter. Pflichtfeld – ohne Quality-Verantwortlichen ist das Dokument nicht freigabefähig.">
+        <span class="print-text" id="print-quality"></span>
+      </div>
+      <div class="feld">
+        <label>Freigabe (Management)</label>
+        <input type="text" id="meta-freigabe" placeholder="Name" oninput="aktualisiereKopf()" title="Management-Vertreter der das Risiko namentlich akzeptiert – wird bei RPZ ≥ 27 zwingend">
+        <span class="print-text" id="print-freigabe"></span>
+      </div>
+      <div class="feld feld-voll">
+        <label>Analysegegenstand / Auslöser *</label>
+        <textarea rows="2" id="meta-umfang" placeholder="Was wird analysiert, warum, was hat diese FMEA ausgelöst?" oninput="speichern()" title="Analysegegenstand, Auslöser und Perimeter – muss klar definieren was IN und was NICHT IN dieser Analyse enthalten ist"></textarea>
+        <span class="print-text" id="print-umfang"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- hidden threshold inputs – Schurter Standard, nicht sichtbar -->
+  <input type="hidden" id="meta-schwelle-hoch" value="27">
+  <input type="hidden" id="meta-schwelle-mitte" value="12">
+
+  <!-- TEAM -->
+  <div class="block">
+    <div class="block-titel">Beteiligte Personen</div>
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr auto; gap:0; margin-bottom:10px;">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.4px;color:var(--grau);padding:4px 8px 6px;">Name</div>
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.4px;color:var(--grau);padding:4px 8px 6px;">Abteilung / Funktion</div>
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.4px;color:var(--grau);padding:4px 8px 6px;">Rolle in dieser FMEA</div>
+      <div></div>
+    </div>
+    <div id="team-liste" style="display:flex; flex-direction:column; gap:4px; margin-bottom:10px;"></div>
+    <button class="btn-prim" onclick="teamZeileHinzu()" style="font-size:11px; padding:5px 12px;">+ Person hinzufügen</button>
+  </div>
+
+  <!-- BEWERTUNGSSKALEN -->
+  <div style="margin-bottom:6px;padding:8px 12px;background:var(--blau-bg);border-left:3px solid var(--blau);font-size:11px;color:var(--text);">
+    <strong>Zwei-Logik-Prinzip:</strong> &nbsp;
+    <strong>S allein</strong> bestimmt die Eskalationsebene – unabhängig von A und E. &nbsp;·&nbsp;
+    <strong>A × E</strong> bestimmt die Dringlichkeit der Massnahme innerhalb dieser Ebene (max. 16).
+  </div>
+  <div class="skalen-raster" style="grid-template-columns: repeat(3, 1fr);">
+    <div class="skala-karte s-karte">
+      <h3><span class="skalen-badge">S</span>Schwere → bestimmt Eskalationsebene</h3>
+      <div class="stufe">
+        <div class="stufen-nr">4</div>
+        <div class="stufen-text">
+          <strong>Hauptfehler mit Sicherheitsrelevanz → Management-Entscheid</strong>
+          <span>Schutzfunktion versagt oder Personengefährdung möglich – ausserhalb interner Kontrolle (Feld, WE nach Auslieferung, beim Endanwender)</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">3</div>
+        <div class="stufen-text">
+          <strong>Hauptfehler extern → Ressort-Entscheid</strong>
+          <span>Produkt erfüllt seine Funktion nicht. Rückruf oder Lieferstopp möglich. Intern durch QS festgestellt. Kostenfolgen &gt; 50 kFr.</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">2</div>
+        <div class="stufen-text">
+          <strong>Hauptfehler intern / Nebenfehler extern → Engineering</strong>
+          <span>Auswirkung auf Kunden, Produkt unter Kontrolle der Firma. Kostenfolgen &gt; 20 kFr. Produktionsstopp möglich.</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">1</div>
+        <div class="stufen-text">
+          <strong>Nebenfehler → Dokumentieren</strong>
+          <span>Keine Funktionsauswirkung beim Kunden. Kostenfolgen &lt; 20 kFr. Interne Korrektur ausreichend.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="skala-karte a-karte">
+      <h3><span class="skalen-badge">A</span>Auftreten → Dringlichkeit (mit E)</h3>
+      <div class="stufe">
+        <div class="stufen-nr">4</div>
+        <div class="stufen-text">
+          <strong>Nachgewiesen oder systematisch</strong>
+          <span>≥ 3 Fälle / 6 Mt. – ODER – Messung / Dokument belegt Fehler bereits heute</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">3</div>
+        <div class="stufen-text">
+          <strong>Wiederholungsfehler oder Normwert verletzt</strong>
+          <span>2 Fälle / 6 Mt. – ODER – Spezifikation oder Berechnung zeigt Anforderungsverletzung</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">2</div>
+        <div class="stufen-text">
+          <strong>Erstes Auftreten oder Nachweis fehlt</strong>
+          <span>1. Auftreten – ODER – Testnachweis älter als 3 Jahre oder nicht vorhanden</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">1</div>
+        <div class="stufen-text">
+          <strong>Kein Auftreten, aktueller Nachweis vorhanden</strong>
+          <span>Gültiger Prüfbericht (≤ 3 Jahre), keine Reklamation oder Feldrückmeldung</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="skala-karte e-karte">
+      <h3><span class="skalen-badge">E</span>Entdeckung → Dringlichkeit (mit A)</h3>
+      <div class="stufe">
+        <div class="stufen-nr">4</div>
+        <div class="stufen-text">
+          <strong>Keine Kontrolle vorhanden</strong>
+          <span>Kein definierter Prüfschritt, Test oder Review – Fehler erreicht Kunden unbemerkt</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">3</div>
+        <div class="stufen-text">
+          <strong>Kontrolle nicht dokumentiert oder nicht regelmässig</strong>
+          <span>Fehler kann auffallen, aber kein definierter, nachvollziehbarer Prüfprozess</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">2</div>
+        <div class="stufen-text">
+          <strong>Dokumentierter Prüfschritt, nicht lückenlos</strong>
+          <span>Stichproben oder partielle Tests – Fehler kann durchfallen</span>
+        </div>
+      </div>
+      <div class="stufe">
+        <div class="stufen-nr">1</div>
+        <div class="stufen-text">
+          <strong>100% Kontrolle</strong>
+          <span>Jedes Stück wird geprüft oder Prozess schliesst Fehler konstruktiv aus</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="infozeile">
+    <strong>Risikostufe 1–7</strong> aus S × A×E-Zone &nbsp;·&nbsp; S bestimmt Eskalationsebene &nbsp;·&nbsp; A×E bestimmt Dringlichkeit der Massnahme
+  </div>
+
+  <div class="steuerung">
+    <button class="btn-prim" onclick="zeileHinzu()">+ Zeile hinzufügen</button>
+    <button onclick="printView()">Drucken / PDF</button>
+    <button onclick="exportCSV()">↓ CSV Export</button>
+    <button onclick="document.getElementById('csv-import-input').click()">↑ CSV Import</button>
+    <input type="file" id="csv-import-input" accept=".csv" style="display:none" onchange="importCSV(this)">
+    <button class="btn-ghost" onclick="alleLoeschen()">Alle Zeilen löschen</button>
+    <button class="btn-ghost" onclick="allesReseten()" style="color:var(--rot);">⟳ Alles zurücksetzen</button>
+    <span id="zeilen-anzahl"></span>
+  </div>
+
+  <div class="tabelle-rahmen">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:24px" title="Laufnummer Gap">#</th>
+          <th style="min-width:140px" title="Fehlerart oder Compliance-Gap: Was fehlt oder ist falsch? Konkret benennen.">Fehlerart / Gap</th>
+          <th style="min-width:95px" title="Norm oder Anforderung auf die sich der Gap bezieht (z.B. IEC 60938-2: 5.5)">Norm / Referenz</th>
+          <th style="min-width:95px" title="Welche Prüfung oder Kontrolle existiert heute? 'Keine' ist eine valide Antwort.">Bestehende Kontrolle</th>
+          <th class="th-gap-actions" style="width:32px" title="Auswirkung hinzufügen / Gap löschen"></th>
+          <th style="min-width:130px" title="Was passiert konkret wenn dieser Gap nicht behoben wird? Pro Auswirkung eine Zeile.">Auswirkung</th>
+          <th style="min-width:90px" title="Wo tritt der Schaden auf? Entscheidend für S-Bewertung: extern = höhere Kritikalität.">Ort des Fehlers</th>
+          <th class="th-s" style="width:44px" title="Schwere – bestimmt die Eskalationsebene. S=4: Sicherheitsrelevanz. S=1: Nebenfehler.">S</th>
+          <th class="th-a" style="width:44px" title="Auftreten – Wiederholungsfehler oder Nachweis? A=4: nachgewiesen/≥3 Fälle. A=1: kein Auftreten, aktueller Nachweis vorhanden.">A</th>
+          <th class="th-e" style="width:44px" title="Entdeckung – Welche Kontrolle existiert? E=4: keine Kontrolle. E=1: 100% Prüfung.">E</th>
+          <th class="th-rpz" style="width:68px" title="Risikostufe aus S × A×E-Zone. Hover für Matrix.">Risiko</th>
+          <th style="min-width:105px" title="Eskalationsebene direkt aus S: S=4 → Management, S=3 → Ressort, S=2 → Engineering, S=1 → Dokumentieren">Entscheid-Ebene</th>
+          <th style="min-width:128px" title="Warum genau diese S/A/E-Werte? Fakten nennen: Messwert, Fallzahl, Dokumentreferenz. Keine Meinung.">Begründung Bewertung</th>
+          <th style="min-width:138px" title="Konkrete Massnahme zur Risikoreduktion. Was genau wird geändert, geprüft oder dokumentiert?">Massnahme</th>
+          <th style="min-width:90px" title="Restrisiko nach Umsetzung der Massnahme. 'Nicht akzeptiert' erfordert weitere Massnahmen.">Restrisiko</th>
+          <th style="min-width:88px" title="Person die für die Umsetzung dieser Massnahme verantwortlich ist">Verantwortlich</th>
+          <th style="min-width:90px" title="Zieldatum für die Umsetzung der Massnahme">Zieldatum</th>
+          <th style="min-width:110px" title="Offen: noch keine Massnahme aktiv · In Bearbeitung: läuft · Abgeschlossen: umgesetzt und Restrisiko bewertet">Status</th>
+          <th class="th-del-btn" style="width:24px"></th>
+        </tr>
+      </thead>
+      <tbody id="fmea-body"></tbody>
+    </table>
+  </div>
+
+  <div class="zusammenfassung">
+    <div class="sum-pos"><span class="sum-label">Gaps total</span><span class="sum-wert c-blau" id="sum-total">0</span></div>
+    <div class="sum-pos"><span class="sum-label">S=4 Management</span><span class="sum-wert c-krit" id="sum-krit">0</span></div>
+    <div class="sum-pos"><span class="sum-label">S=3 Ressort</span><span class="sum-wert c-hoch" id="sum-hoch">0</span></div>
+    <div class="sum-pos"><span class="sum-label">S=2 Engineering</span><span class="sum-wert c-mit" id="sum-mitte">0</span></div>
+    <div class="sum-pos"><span class="sum-label">S=1 Dokumentieren</span><span class="sum-wert c-ger" id="sum-ger">0</span></div>
+    <div class="sum-pos"><span class="sum-label">Max Risiko</span><span class="sum-wert" id="sum-max">—</span></div>
+    <div class="sum-pos"><span class="sum-label">Offen</span><span class="sum-wert c-krit" id="sum-offen">0</span></div>
+    <div class="sum-pos"><span class="sum-label">Abgeschlossen</span><span class="sum-wert c-ger" id="sum-zu">0</span></div>
+  </div>
+
+
+  <!-- BUBBLE CHART -->
+  <div class="bubble-section" style="background:var(--weiss);border:1px solid var(--border);margin-top:16px;padding:16px 20px 8px;">
+    <div style="font-size:11px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:var(--blau);border-bottom:1px solid var(--grau-hell);padding-bottom:8px;margin-bottom:12px;">
+      Risikoübersicht – alle Auswirkungen
+      <span style="font-size:10px;font-weight:normal;color:var(--grau);margin-left:12px;">Bubble-Grösse = Status (Offen gross · In Bearbeitung mittel · Abgeschlossen klein) · Hover für Details</span>
+    </div>
+    <canvas id="bubble-chart" style="width:100%;max-height:320px;"></canvas>
+    <div style="display:flex;gap:16px;margin-top:8px;flex-wrap:wrap;">
+      <span style="font-size:10px;color:var(--grau);">■ <span style="color:#C62828">Stufe 6–7</span> &nbsp;■ <span style="color:#EF9A9A;background:#EF9A9A">__</span> <span style="color:#BF360C">Stufe 5</span> &nbsp;■ <span style="color:#E65100">Stufe 4</span> &nbsp;■ <span style="color:#F57F17">Stufe 3</span> &nbsp;■ <span style="color:#33691E">Stufe 1–2</span></span>
+    </div>
+  </div>
+
+  <!-- WEGLEITUNG -->
+  <div style="margin-top:6px;padding:6px 12px;background:var(--grau-bg);border:1px solid var(--border);border-bottom:none;font-size:11px;color:var(--grau);">
+    Restrisiko nach Massnahme für jede Auswirkung bewerten. &nbsp;·&nbsp; Dringlichkeit: &nbsp;<strong style="color:#C00000">S=4 oder (S=3 &amp; A×E ≥ 6) → Sofort</strong> &nbsp;|&nbsp; <strong style="color:var(--orange)">(S=3 &amp; A×E &lt; 6) oder (S=2 &amp; A×E ≥ 6) → ≤ 30 Tage</strong> &nbsp;|&nbsp; <strong style="color:var(--gruen)">S=2 &amp; A×E &lt; 6 oder S=1 → Review-Zyklus</strong>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:1px solid var(--border);">
+    <div style="background:var(--blau);color:white;padding:10px 14px;">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;opacity:0.7;margin-bottom:6px;">S = 1</div>
+      <div style="font-size:12px;font-weight:bold;margin-bottom:6px;">Dokumentieren &amp; überwachen</div>
+      <div style="font-size:11px;opacity:0.85;line-height:1.6;">
+        → ZI eröffnen<br>
+        → Befund festhalten<br>
+        → Periodisch prüfen
+      </div>
+    </div>
+    <div style="background:#E8F0E8;padding:10px 14px;border-left:1px solid var(--border);">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:var(--grau);margin-bottom:6px;">S = 2</div>
+      <div style="font-size:12px;font-weight:bold;color:var(--gruen);margin-bottom:6px;">Engineering-Massnahme</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.6;">
+        → ZI eröffnen<br>
+        → Massnahme, Verantwortlichen &amp; Termin definieren<br>
+        → Status nachverfolgen
+      </div>
+    </div>
+    <div style="background:#FFF8EE;padding:10px 14px;border-left:1px solid var(--border);">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:var(--grau);margin-bottom:6px;">S = 3</div>
+      <div style="font-size:12px;font-weight:bold;color:var(--orange);margin-bottom:6px;">Ressort-Entscheid</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.6;">
+        → ZI eröffnen<br>
+        → Massnahme, Verantwortlichen &amp; Termin definieren<br>
+        → Compliance Verantwortlichen informieren<br>
+        → R&amp;D Management einbeziehen &amp; Freigabe einholen
+      </div>
+    </div>
+    <div style="background:#FFF0F0;padding:10px 14px;border-left:1px solid var(--border);">
+      <div style="font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:0.5px;color:var(--grau);margin-bottom:6px;">S = 4</div>
+      <div style="font-size:12px;font-weight:bold;color:#C00000;margin-bottom:6px;">Management-Entscheid</div>
+      <div style="font-size:11px;color:var(--text);line-height:1.6;">
+        → ZI eröffnen<br>
+        → Massnahme, Verantwortlichen &amp; Termin definieren<br>
+        → Compliance Verantwortlichen informieren<br>
+        → R&amp;D Management einbeziehen &amp; Freigabe einholen<br>
+        → Produkt sperren bis Entscheid vorliegt<br>
+        → Risikoakzeptanz durch Management
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── VORLAGE ────────────────────────────────────────────────────────────
+const VORLAGE = [];
+
+let zeilen = [], nextId = 10, nextAuswId = 100;
+
+// Zwei-Logik-Prinzip:
+// S → Eskalationsebene (fix, unabhängig von A/E)
+// A×E → Dringlichkeit der Massnahme (max 16)
+
+const rpz = r => (parseInt(r.a)||0)*(parseInt(r.e)||0);   // Dringlichkeit max 16
+
+function dringKls(a) {
+  const s = parseInt(a.s)||0, ae = rpz(a);
+  if (!s) return 'GERING';
+  if (s === 4)           return 'KRITISCH';
+  if (s === 3 && ae >= 6) return 'KRITISCH';
+  if (s === 3 && ae < 6)  return 'HOCH';
+  if (s === 2 && ae >= 6) return 'HOCH';
+  return 'GERING';
+}
+
+function entInfo(r) {
+  const s = parseInt(r.s) || 0;
+  if (s === 4) return ['Management-Entscheid', 'ent-GL'];
+  if (s === 3) return ['Ressort-Entscheid',    'ent-R'];
+  if (s === 2) return ['Engineering',          'ent-E'];
+  if (s === 1) return ['Dokumentieren', 'ent-OK'];
+  return ['–', ''];
+}
+
+function dringLabel(a) {
+  const s = parseInt(a.s)||0, ae = rpz(a);
+  if (!s) return '–';
+  if (s === 4)            return 'Sofort';
+  if (s === 3 && ae >= 6) return 'Sofort';
+  if (s === 3 && ae < 6)  return '≤ 30 Tage';
+  if (s === 2 && ae >= 6) return '≤ 30 Tage';
+  return 'Review-Zyklus';
+}
+
+function aktualisiereKopf() {
+  const p = document.getElementById('meta-projekt').value;
+  const d = document.getElementById('meta-datum').value;
+  const n = document.getElementById('meta-doknr').value;
+  document.getElementById('kopf-projekt').textContent = p || 'Compliance FMEA';
+  const dCH = d ? d.split('-').reverse().join('.') : '';
+  const q = document.getElementById('meta-quality') ? document.getElementById('meta-quality').value : '';
+  document.getElementById('kopf-meta').textContent = [n, dCH, q ? 'Quality: '+q : ''].filter(Boolean).join(' · ');
+
+  // Sync print-text spans for Dokumentkopf
+  const fields = ['projekt','doknr','autor','pruefer','quality','freigabe','umfang'];
+  fields.forEach(k => {
+    const el = document.getElementById('meta-'+k);
+    const pt = document.getElementById('print-'+k);
+    if (el && pt) pt.textContent = el.value;
+  });
+  if (document.getElementById('print-datum')) {
+    document.getElementById('print-datum').textContent = dCH;
+  }
+
+  speichern();
+}
+
+function speichern() {
+  const meta = {};
+  ['projekt','doknr','datum','autor','pruefer','freigabe','umfang','quality'].forEach(k => {
+    const el = document.getElementById('meta-'+k);
+    if (el) meta[k] = el.value;
+  });
+  try { localStorage.setItem('sfmea9', JSON.stringify({zeilen, team, meta})); } catch(e){}
+}
+
+function laden() {
+  try {
+    const s = localStorage.getItem('sfmea9');
+    if (s) {
+      const d = JSON.parse(s);
+      zeilen = d.zeilen || [];
+      team   = d.team   || [];
+      nextId     = zeilen.length ? Math.max(...zeilen.map(r=>r.id))+1 : 10;
+      nextAuswId = zeilen.flatMap(z=>z.auswirkungen||[]).length ? Math.max(...zeilen.flatMap(z=>z.auswirkungen||[]).map(a=>a.id))+1 : 100;
+      nextTeamId = team.length ? Math.max(...team.map(t=>t.id))+1 : 1;
+      const m = d.meta || {};
+      ['projekt','doknr','datum','autor','pruefer','freigabe','umfang','quality'].forEach(k => {
+        const el = document.getElementById('meta-'+k);
+        if (el && m[k] !== undefined) el.value = m[k];
+      });
+      aktualisiereKopf();
+      return;
+    }
+  } catch(e){}
+  zeilen = [];
+  team = [];
+  document.getElementById('meta-datum').value = new Date().toISOString().slice(0,10);
+  aktualisiereKopf();
+  renderTeam();
+  render();
+}
+
+function vorlageladen() {
+  nextId = 10; nextAuswId = 100;
+  zeilen = JSON.parse(JSON.stringify(VORLAGE));
+  document.getElementById('meta-datum').value   = new Date().toISOString().slice(0,10);
+  document.getElementById('meta-projekt').value = 'DEN Drossel – Transfer VISTA';
+  document.getElementById('meta-doknr').value   = 'MGA-S-2026-DEN';
+  document.getElementById('meta-umfang').value  = 'Compliance-Analyse für 95 blockierte Artikel der DEN-Produktfamilie. Auslöser: fehlende Normnachweise und CE-Kennzeichnung ohne Basis.';
+  aktualisiereKopf(); render();
+}
+
+function alleLoeschen() {
+  if (confirm('Alle Gaps löschen?')) { zeilen = []; speichern(); render(); }
+}
+
+function allesReseten() {
+  if (!confirm('Komplettes Sheet zurücksetzen?\n\nAlle Gaps, Metadaten und Team-Einträge werden gelöscht. Dieser Schritt kann nicht rückgängig gemacht werden.')) return;
+  zeilen = []; team = []; nextId = 10; nextAuswId = 100; nextTeamId = 1;
+  ['projekt','doknr','datum','autor','pruefer','freigabe','umfang','quality'].forEach(k => {
+    const el = document.getElementById('meta-'+k);
+    if (el) el.value = k === 'datum' ? new Date().toISOString().slice(0,10) : '';
+  });
+  try { localStorage.removeItem('sfmea9'); } catch(e){}
+  aktualisiereKopf(); renderTeam(); render();
+}
+
+function zeileHinzu() {
+  zeilen.push({ id: nextId++, gap:'', norm:'', kontrolle:'',
+    auswirkungen:[{ id: nextAuswId++, text:'', ort:'', s:'', a:'', e:'', begruendung:'', massnahme:'', restrisiko:'', verantwortlich:'', termin:'', status:'Offen' }]
+  });
+  speichern(); render();
+  setTimeout(()=>window.scrollTo(0,document.body.scrollHeight),50);
+}
+
+function loescheZeile(id) {
+  if (!confirm('Gap und alle zugehörigen Auswirkungen löschen?')) return;
+  zeilen = zeilen.filter(r=>r.id!==id); speichern(); render();
+}
+
+function auswirkungHinzu(gapId) {
+  const z = zeilen.find(r=>r.id===gapId);
+  if (!z) return;
+  z.auswirkungen.push({ id: nextAuswId++, text:'', s:'', a:'', e:'', begruendung:'', massnahme:'', restrisiko:'', verantwortlich:'', termin:'', status:'Offen' });
+  speichern(); render();
+}
+
+function loescheAuswirkung(gapId, awId) {
+  const z = zeilen.find(r=>r.id===gapId);
+  if (!z) return;
+  if (z.auswirkungen.length <= 1) {
+    // Letzte Auswirkung: ganzen Gap löschen
+    if (!confirm('Letzte Auswirkung – Gap komplett löschen?')) return;
+    zeilen = zeilen.filter(r=>r.id!==gapId);
+  } else {
+    z.auswirkungen = z.auswirkungen.filter(a=>a.id!==awId);
+  }
+  speichern(); render();
+}
+
+function updGap(id, feld, wert) {
+  const z = zeilen.find(r=>r.id===id);
+  if (z) { z[feld] = wert; speichern(); }
+}
+
+function updAusw(gapId, awId, feld, wert) {
+  const z = zeilen.find(r=>r.id===gapId);
+  if (!z) return;
+  const a = z.auswirkungen.find(a=>a.id===awId);
+  if (!a) return;
+  a[feld] = ['s','a','e'].includes(feld) ? +wert : wert;
+  speichern();
+  if (['s','a','e'].includes(feld)) render(); else aktualisiereSum();
+}
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function opt(arr, val, withBlank) {
+  const blank = withBlank ? `<option value="" ${(val===''||val===undefined||val===null)?'selected':''}></option>` : '';
+  return blank + arr.map(v=>`<option value="${v}" ${String(v)===String(val)?'selected':''}>${v}</option>`).join('');
+}
+
+// ── RISIKOMATRIX ──────────────────────────────────────────────────────
+// S (1-4) × AE-Zone (1-4) → Risikostufe 1-7 mit Farbe
+// AE-Zone: 1-2=1, 3-4=2, 5-9=3, 10-16=4
+function aeZone(ae) {
+  if (ae <= 2)  return 1;
+  if (ae <= 4)  return 2;
+  if (ae <= 9)  return 3;
+  return 4;
+}
+
+// Matrix: [s-1][aeZone-1] → risikostufe 1-7
+const MATRIX = [
+  [1, 1, 2, 2],  // S=1
+  [1, 2, 3, 4],  // S=2
+  [2, 3, 4, 5],  // S=3
+  [3, 4, 6, 7],  // S=4
+];
+
+const MATRIX_LABEL = ['','Extrem gering','Sehr gering','Gering','Mittel','Hoch','Sehr hoch','Extrem hoch'];
+const MATRIX_FARBE = ['','mz-1','mz-2','mz-3','mz-4','mz-5','mz-6','mz-7'];
+
+function matrixStufe(a) {
+  const s = (parseInt(a.s)||1) - 1;
+  const z = aeZone(rpz(a)) - 1;
+  return MATRIX[Math.max(0,Math.min(3,s))][Math.max(0,Math.min(3,z))];
+}
+
+function matrixHtml(a) {
+  if (!a.s && !a.a && !a.e) {
+    return `<div class="matrix-zelle" style="color:#bbb;font-size:12px;">–</div>`;
+  }
+  const stufe = matrixStufe(a);
+  const farbe = MATRIX_FARBE[stufe];
+  const label = MATRIX_LABEL[stufe];
+  const ae    = rpz(a);
+  const zone  = aeZone(ae);
+
+  // Build mini matrix for popup
+  let popupRows = '';
+  for (let s = 4; s >= 1; s--) {
+    popupRows += '<tr>';
+    popupRows += `<th style="background:#EBF1F8;font-size:9px;">S=${s}</th>`;
+    for (let z = 1; z <= 4; z++) {
+      const st = MATRIX[s-1][z-1];
+      const fc = MATRIX_FARBE[st];
+      const active = (s === (a.s||1) && z === zone) ? 'outline:2px solid #000;' : '';
+      popupRows += `<td class="${fc}" style="${active}padding:3px 5px;">${st}</td>`;
+    }
+    popupRows += '</tr>';
+  }
+
+  return `
+    <div class="matrix-wrap">
+      <div class="${farbe} matrix-zelle" title="Risikostufe ${stufe}: ${label}">
+        <span style="font-size:16px;font-weight:bold;">${stufe}</span>
+        <span class="mz-label">${label}</span>
+      </div>
+      <div class="matrix-popup">
+        <div class="mp-title">Risikomatrix – S × A×E-Zone</div>
+        <table>
+          <tr><th></th><th>AE 1–2</th><th>AE 3–4</th><th>AE 5–9</th><th>AE 10–16</th></tr>
+          ${popupRows}
+        </table>
+        <div style="font-size:9px;color:#666;margin-top:4px;">Aktuelle Position markiert</div>
+      </div>
+    </div>`;
+}
+
+function render() {
+  const tb = document.getElementById('fmea-body');
+  tb.innerHTML = '';
+  const stufen = [1,2,3,4];
+  let gapNr = 0;
+
+  zeilen.forEach(z => {
+    gapNr++;
+    const awCount = z.auswirkungen.length;
+
+    z.auswirkungen.forEach((a, ai) => {
+      const ae = rpz(a), kls = dringKls(a), [el, ec] = entInfo(a);
+      const sc = 'st-'+(a.status||'Offen').replace(/ /g,'-');
+      const mHtml = matrixHtml(a);
+      const mStufe = matrixStufe(a);
+      const awId = `${gapNr}.${ai+1}`;
+      const tr = document.createElement('tr');
+
+      const gapCells = ai === 0 ? `
+        <td class="zeilen-nr" rowspan="${awCount}" style="vertical-align:middle;background:#EBF1F8;border-right:2px solid var(--blau);">${gapNr}</td>
+        <td rowspan="${awCount}" style="background:#EBF1F8;border-right:1px solid var(--border);vertical-align:top;">
+          <textarea rows="3" onchange="updGap(${z.id},'gap',this.value)" style="min-width:130px;font-weight:bold;" title="Fehlerart oder Compliance-Gap: Was fehlt oder ist falsch? Konkret benennen, keine Wertung.">${esc(z.gap)}</textarea>
+          <span class="print-text" style="font-weight:bold">${esc(z.gap)}</span>
+        </td>
+        <td rowspan="${awCount}" style="background:#EBF1F8;border-right:1px solid var(--border);vertical-align:top;">
+          <textarea rows="2" onchange="updGap(${z.id},'norm',this.value)" style="min-width:85px;" title="Norm oder Anforderung auf die sich der Gap bezieht (z.B. IEC 60938-2: 5.5)">${esc(z.norm)}</textarea>
+          <span class="print-text">${esc(z.norm)}</span>
+        </td>
+        <td rowspan="${awCount}" style="background:#EBF1F8;border-right:1px solid var(--border);vertical-align:top;">
+          <textarea rows="2" onchange="updGap(${z.id},'kontrolle',this.value)" style="min-width:85px;" title="Welche Prüfung, Test oder Kontrolle existiert heute für diesen Gap? 'Keine' ist eine valide Antwort.">${esc(z.kontrolle)}</textarea>
+          <span class="print-text">${esc(z.kontrolle)}</span>
+        </td>
+        <td class="td-gap-actions" rowspan="${awCount}" style="background:#EBF1F8;border-right:2px solid var(--blau-hell);vertical-align:middle;text-align:center;">
+          <button onclick="auswirkungHinzu(${z.id})" title="Auswirkung hinzufügen"
+            style="font-size:18px;background:none;border:none;color:var(--blau);cursor:pointer;line-height:1;display:block;margin:0 auto 6px;">+</button>
+          <button class="del-btn" onclick="loescheZeile(${z.id})" title="Gap löschen">✕</button>
+        </td>` : '';
+
+      tr.innerHTML = `
+        ${gapCells}
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}">
+          <div style="font-size:9px;font-weight:bold;color:var(--blau);margin-bottom:2px;font-family:Arial,Helvetica,sans-serif;">${awId}</div>
+          <textarea rows="2" onchange="updAusw(${z.id},${a.id},'text',this.value)" style="min-width:130px;" placeholder="Auswirkung beschreiben...">${esc(a.text)}</textarea>
+        </td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}">
+          <select onchange="updAusw(${z.id},${a.id},'ort',this.value)"
+            style="border:1px solid var(--border);font-family:Arial,Helvetica,sans-serif;font-size:11px;width:100%;padding:4px 3px;outline:none;background:white;cursor:pointer;" title="Wo tritt der Schaden auf? Entscheidend für S-Bewertung: extern = höhere Kritikalität">
+            ${opt(['','Intern','Wareneingang Kunde','Assembly beim Kunden','Feld / Endanwender','Behörde / Markt'],a.ort||'')}
+          </select>
+          <span class="print-text">${esc(a.ort||'')}</span>
+        </td>
+        <td style="text-align:center;border-top:${ai>0?'1px dashed #DDD':'none'}"><select class="score-sel score-s" onchange="updAusw(${z.id},${a.id},'s',this.value)">${opt(stufen,a.s,true)}</select><span class="print-score" style="color:#C00000">${a.s}</span></td>
+        <td style="text-align:center;border-top:${ai>0?'1px dashed #DDD':'none'}"><select class="score-sel score-a" onchange="updAusw(${z.id},${a.id},'a',this.value)">${opt(stufen,a.a,true)}</select><span class="print-score" style="color:var(--orange)">${a.a}</span></td>
+        <td style="text-align:center;border-top:${ai>0?'1px dashed #DDD':'none'}"><select class="score-sel score-e" onchange="updAusw(${z.id},${a.id},'e',this.value)">${opt(stufen,a.e,true)}</select><span class="print-score" style="color:var(--blau)">${a.e}</span></td>
+        <td style="text-align:center;border-top:${ai>0?'1px dashed #DDD':'none'}">${mHtml}<span class="print-text" style="font-weight:bold">Stufe ${mStufe}: ${MATRIX_LABEL[mStufe]}</span></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><span class="${ec}">${el}</span><br><span style="font-size:10px;color:var(--grau)">${dringLabel(a)}</span></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><textarea rows="2" class="begr-feld" onchange="updAusw(${z.id},${a.id},'begruendung',this.value)" style="min-width:110px;" title="Warum genau diese S/A/E-Werte? Fakten nennen: Messwert, Fallzahl, Dokumentreferenz. Keine Meinung, kein 'ich glaube'.">${esc(a.begruendung)}</textarea><span class="print-text">${esc(a.begruendung)}</span></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><textarea rows="2" onchange="updAusw(${z.id},${a.id},'massnahme',this.value)" style="min-width:120px;" title="Konkrete Massnahme zur Risikoreduktion. Was genau wird geändert, geprüft oder dokumentiert?">${esc(a.massnahme)}</textarea><span class="print-text">${esc(a.massnahme)}</span></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><textarea rows="2" onchange="updAusw(${z.id},${a.id},'restrisiko',this.value)" style="min-width:80px;" title="Restrisiko nach Umsetzung der Massnahme">${esc(a.restrisiko)}</textarea><span class="print-text">${esc(a.restrisiko)}</span></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><input type="text" value="${esc(a.verantwortlich)}" onchange="updAusw(${z.id},${a.id},'verantwortlich',this.value)" style="min-width:72px;" title="Name der Person die für die Umsetzung dieser Massnahme verantwortlich ist"><span class="print-text">${esc(a.verantwortlich)}</span></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><input type="date" value="${esc(a.termin)}" onchange="updAusw(${z.id},${a.id},'termin',this.value)" style="min-width:88px;"><span class="print-text">${a.termin ? a.termin.split('-').reverse().join('.') : ''}</span></td>
+        <td style="border-top:${ai>0?'1px dashed #DDD':'none'}"><select style="font-weight:bold;font-size:12px;border:none;background:transparent;outline:none;cursor:pointer;width:100%;color:${a.status==='Offen'?'#C00000':a.status==='In Bearbeitung'?'var(--orange)':'var(--gruen)'}" onchange="updAusw(${z.id},${a.id},'status',this.value);render()" title="Offen: noch keine Massnahme aktiv · In Bearbeitung: Massnahme läuft · Abgeschlossen: Massnahme umgesetzt und Restrisiko bewertet">${opt(['Offen','In Bearbeitung','Abgeschlossen'],a.status)}</select>
+        <span class="print-text" style="font-weight:bold;color:${a.status==='Offen'?'#C00000':a.status==='In Bearbeitung'?'#C85A00':'#1E6B1E'}">${esc(a.status)}</span></td>
+        <td class="td-del-btn" style="border-top:${ai>0?'1px dashed #DDD':'none'}"><button class="del-btn" onclick="loescheAuswirkung(${z.id},${a.id})" title="Auswirkung löschen" style="font-size:12px;">−</button></td>`;
+      tb.appendChild(tr);
+    });
+
+    // Trennlinie nach jedem Gap
+    const sep = document.createElement('tr');
+    sep.innerHTML = `<td colspan="15" style="height:4px;background:var(--blau);padding:0;border:none;"></td>`;
+    tb.appendChild(sep);
+  });
+
+  aktualisiereSum();
+  document.getElementById('zeilen-anzahl').textContent = `${zeilen.length} Gap${zeilen.length!==1?'s':''}`;
+  if (typeof renderBubbleChart === 'function') setTimeout(renderBubbleChart, 50);
+  // Auto-grow für alle Textareas
+  document.querySelectorAll('td textarea').forEach(ta => {
+    const autosize = () => { ta.style.height = 'auto'; ta.style.height = ta.scrollHeight + 'px'; };
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+    ta.removeEventListener('input', ta._autosize);
+    ta._autosize = autosize;
+    ta.addEventListener('input', autosize);
+  });
+}
+
+function aktualisiereSum() {
+  const alleAusw = zeilen.flatMap(z=>z.auswirkungen||[]);
+  const ae = alleAusw.map(a=>rpz(a));
+  document.getElementById('sum-total').textContent = zeilen.length;
+  document.getElementById('sum-krit').textContent  = alleAusw.filter(a=>parseInt(a.s)===4).length;
+  document.getElementById('sum-hoch').textContent  = alleAusw.filter(a=>parseInt(a.s)===3).length;
+  document.getElementById('sum-mitte').textContent = alleAusw.filter(a=>parseInt(a.s)===2).length;
+  document.getElementById('sum-ger').textContent   = alleAusw.filter(a=>parseInt(a.s)===1).length;
+  const maxStufe = alleAusw.length ? Math.max(...alleAusw.map(a=>matrixStufe(a))) : 0;
+  document.getElementById('sum-max').textContent = maxStufe || '—';
+  document.getElementById('sum-offen').textContent  = alleAusw.filter(a=>a.status==='Offen').length;
+  document.getElementById('sum-zu').textContent     = alleAusw.filter(a=>a.status==='Abgeschlossen').length;
+}
+
+function exportCSV() {
+  const q = v => `"${(v||'').replace(/"/g,'""')}"`;
+  const rows = [];
+
+  // ── Sektion 1: Dokumentkopf ──────────────────────────────────────────
+  rows.push('#DOKUMENTKOPF');
+  ['projekt','doknr','datum','autor','pruefer','quality','freigabe','umfang'].forEach(k => {
+    const el = document.getElementById('meta-'+k);
+    rows.push(`${k};${q(el ? el.value : '')}`);
+  });
+  rows.push('');
+
+  // ── Sektion 2: Team ──────────────────────────────────────────────────
+  rows.push('#TEAM');
+  rows.push('Name;Abteilung;Rolle');
+  team.forEach(t => rows.push(`${q(t.name)};${q(t.abteilung)};${q(t.rolle)}`));
+  rows.push('');
+
+  // ── Sektion 3: FMEA-Daten ────────────────────────────────────────────
+  rows.push('#FMEA');
+  rows.push(['Gap#','Fehlerart / Gap','Norm / Referenz','Bestehende Kontrolle','Auswirkung','Ort des Fehlers','S','A','E','A×E Dringlichkeit','Dringlichkeit','Entscheid-Ebene','Begründung','Massnahme','Restrisiko','Verantwortlich','Termin','Status'].join(';'));
+  zeilen.forEach((r,i) => {
+    (r.auswirkungen||[]).forEach(a => {
+      const [el] = entInfo(a);
+      rows.push([i+1,q(r.gap),q(r.norm),q(r.kontrolle),q(a.text),q(a.ort),a.s,a.a,a.e,rpz(a),dringLabel(a),el,q(a.begruendung),q(a.massnahme),q(a.restrisiko),q(a.verantwortlich),a.termin,a.status].join(';'));
+    });
+  });
+
+  const anchor = document.createElement('a');
+  anchor.href = URL.createObjectURL(new Blob(['\uFEFF'+rows.join('\n')],{type:'text/csv;charset=utf-8'}));
+  anchor.download = `ComplianceFMEA_${(document.getElementById('meta-projekt').value||'FMEA').replace(/\s+/g,'_')}_${new Date().toISOString().slice(0,10)}.csv`;
+  anchor.click();
+}
+
+// ── TEAM ──────────────────────────────────────────────────────────────
+let team = [], nextTeamId = 1;
+const ROLLEN = ['Moderation','Analyse','Engineering','Quality / Compliance','Product Management','Freigabe (Management)','Beobachter'];
+
+function teamZeileHinzu() {
+  team.push({ id: nextTeamId++, name:'', abteilung:'', rolle:'Analyse' });
+  speichern(); renderTeam();
+}
+
+function loescheTeam(id) {
+  team = team.filter(t=>t.id!==id); speichern(); renderTeam();
+}
+
+function updTeam(id, feld, wert) {
+  const t = team.find(t=>t.id===id);
+  if (t) { t[feld] = wert; speichern(); }
+}
+
+function renderTeam() {
+  const liste = document.getElementById('team-liste');
+  liste.innerHTML = '';
+  team.forEach(t => {
+    const row = document.createElement('div');
+    row.style.cssText = 'display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:center;';
+    row.innerHTML = `
+      <input type="text" value="${esc(t.name)}" placeholder="Name" onchange="updTeam(${t.id},'name',this.value)"
+        style="border:1px solid var(--border);padding:5px 7px;font-family:Arial,Helvetica,sans-serif;font-size:12px;outline:none;">
+      <input type="text" value="${esc(t.abteilung)}" placeholder="z.B. R&D Engineering" onchange="updTeam(${t.id},'abteilung',this.value)"
+        style="border:1px solid var(--border);padding:5px 7px;font-family:Arial,Helvetica,sans-serif;font-size:12px;outline:none;">
+      <select onchange="updTeam(${t.id},'rolle',this.value)"
+        style="border:1px solid var(--border);padding:5px 7px;font-family:Arial,Helvetica,sans-serif;font-size:12px;outline:none;background:var(--weiss);">
+        ${ROLLEN.map(r=>`<option value="${r}" ${r===t.rolle?'selected':''}>${r}</option>`).join('')}
+      </select>
+      <button class="del-btn" onclick="loescheTeam(${t.id})" title="Entfernen">✕</button>`;
+    liste.appendChild(row);
+  });
+}
+
+function importCSV(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l);
+      if (lines.length < 2) { alert('Keine Daten gefunden.'); return; }
+
+      function parseRow(line) {
+        const fields = [];
+        let cur = '', inQ = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          if (ch === '"') { inQ = !inQ; }
+          else if (ch === ';' && !inQ) { fields.push(cur.trim()); cur = ''; }
+          else { cur += ch; }
+        }
+        fields.push(cur.trim());
+        return fields;
+      }
+
+      // Detect format: new multi-section or legacy single-section
+      const hasSections = lines.some(l => l.startsWith('#'));
+
+      let newMeta = null, newTeam = [], newZeilen = [];
+      nextId = 100; nextAuswId = 200; nextTeamId = 1;
+
+      if (hasSections) {
+        // ── New multi-section format ──────────────────────────────────
+        let section = null;
+        for (const line of lines) {
+          if (line === '#DOKUMENTKOPF') { section = 'meta'; newMeta = {}; continue; }
+          if (line === '#TEAM')         { section = 'team'; continue; }
+          if (line === '#FMEA')         { section = 'fmea'; continue; }
+          if (!line || line.startsWith('#')) continue;
+
+          if (section === 'meta') {
+            const idx = line.indexOf(';');
+            if (idx > 0) { const k = line.slice(0,idx), v = line.slice(idx+1).replace(/^"|"$/g,'').replace(/""/g,'"'); newMeta[k] = v; }
+          } else if (section === 'team') {
+            const f = parseRow(line);
+            if (f[0] === 'Name') continue; // header
+            if (f.length >= 3 && (f[0]||f[1]||f[2]))
+              newTeam.push({ id: nextTeamId++, name: f[0]||'', abteilung: f[1]||'', rolle: f[2]||'Analyse' });
+          } else if (section === 'fmea') {
+            const f = parseRow(line);
+            if (f[0] === 'Gap#') continue; // header
+            if (f.length < 10) continue;
+            const COL = { gap:1, norm:2, kontrolle:3, text:4, ort:5, s:6, a:7, e:8, begr:12, mass:13, rest:14, ver:15, ter:16, stat:17 };
+            const gapNr = f[0];
+            let curZeile = newZeilen.find((z,idx) => String(idx+1) === gapNr);
+            if (!curZeile) {
+              curZeile = { id: nextId++, gap: f[COL.gap]||'', norm: f[COL.norm]||'', kontrolle: f[COL.kontrolle]||'', auswirkungen: [] };
+              newZeilen.push(curZeile);
+            }
+            curZeile.auswirkungen.push({
+              id: nextAuswId++,
+              text: f[COL.text]||'', ort: f[COL.ort]||'',
+              s: f[COL.s] ? parseInt(f[COL.s]) : '',
+              a: f[COL.a] ? parseInt(f[COL.a]) : '',
+              e: f[COL.e] ? parseInt(f[COL.e]) : '',
+              begruendung: f[COL.begr]||'', massnahme: f[COL.mass]||'',
+              restrisiko: f[COL.rest]||'', verantwortlich: f[COL.ver]||'',
+              termin: f[COL.ter]||'', status: f[COL.stat]||'Offen'
+            });
+          }
+        }
+      } else {
+        // ── Legacy format (no sections) ───────────────────────────────
+        const COL = { gap:1, norm:2, kontrolle:3, text:4, ort:5, s:6, a:7, e:8, begr:11, mass:12, rest:13, ver:14, ter:15, stat:16 };
+        let curGapNr = null, curZeile = null;
+        for (let i = 1; i < lines.length; i++) {
+          const f = parseRow(lines[i]);
+          if (f.length < 10) continue;
+          const gapNr = f[0];
+          if (gapNr !== curGapNr) {
+            curGapNr = gapNr;
+            curZeile = { id: nextId++, gap: f[COL.gap]||'', norm: f[COL.norm]||'', kontrolle: f[COL.kontrolle]||'', auswirkungen: [] };
+            newZeilen.push(curZeile);
+          }
+          curZeile.auswirkungen.push({
+            id: nextAuswId++, text: f[COL.text]||'', ort: f[COL.ort]||'',
+            s: f[COL.s] ? parseInt(f[COL.s]) : '', a: f[COL.a] ? parseInt(f[COL.a]) : '', e: f[COL.e] ? parseInt(f[COL.e]) : '',
+            begruendung: f[COL.begr]||'', massnahme: f[COL.mass]||'', restrisiko: f[COL.rest]||'',
+            verantwortlich: f[COL.ver]||'', termin: f[COL.ter]||'', status: f[COL.stat]||'Offen'
+          });
+        }
+      }
+
+      if (newZeilen.length === 0) { alert('Import fehlgeschlagen – Format nicht erkannt.'); return; }
+
+      // Apply imported data
+      zeilen = newZeilen;
+      team   = newTeam;
+
+      // Restore meta fields if present
+      if (newMeta) {
+        ['projekt','doknr','datum','autor','pruefer','quality','freigabe','umfang'].forEach(k => {
+          const el = document.getElementById('meta-'+k);
+          if (el && newMeta[k] !== undefined) el.value = newMeta[k];
+        });
+      }
+
+      aktualisiereKopf();
+      speichern();
+      renderTeam();
+      render();
+
+      const teamInfo = newTeam.length ? `, ${newTeam.length} Person(en)` : '';
+      const metaInfo = newMeta ? ', Dokumentkopf' : '';
+      alert(`${newZeilen.length} Gap(s) mit ${newZeilen.flatMap(z=>z.auswirkungen).length} Auswirkung(en) importiert${metaInfo}${teamInfo}.`);
+    } catch(err) {
+      alert('Fehler beim Import: ' + err.message);
+    }
+    input.value = '';
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+// ── PRINT VIEW ────────────────────────────────────────────────────────
+function printView() {
+  // Collect meta
+  const getMeta = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+  const proj    = getMeta('meta-projekt');
+  const doknr   = getMeta('meta-doknr');
+  const datum   = getMeta('meta-datum');
+  const autor   = getMeta('meta-autor');
+  const pruefer = getMeta('meta-pruefer');
+  const quality = getMeta('meta-quality');
+  const freig   = getMeta('meta-freigabe');
+  const umfang  = getMeta('meta-umfang');
+  const datumCH = datum ? datum.split('-').reverse().join('.') : '';
+
+  const esc2 = s => String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // Matrix colours (same logic as main tool)
+  const MFARBE  = ['','#E8F5E9','#F1F8E9','#FFF9C4','#FFE082','#FFCC80','#EF9A9A','#C62828'];
+  const MTXT    = ['','#1B5E20','#33691E','#F57F17','#E65100','#BF360C','#B71C1C','#FFFFFF'];
+  const MLABEL  = ['','Extrem gering','Sehr gering','Gering','Mittel','Hoch','Sehr hoch','Extrem hoch'];
+  const ENTCOL  = { 4:'#C00000', 3:'#C85A00', 2:'#7A6000', 1:'#1E6B1E' };
+  const ENTLBL  = { 4:'Management-Entscheid', 3:'Ressort-Entscheid', 2:'Engineering', 1:'Dokumentieren' };
+  const DRING   = a => { const s=parseInt(a.s)||0, ae=(parseInt(a.a)||0)*(parseInt(a.e)||0);
+    if(!s) return '–'; if(s===4) return 'Sofort'; if(s===3&&ae>=6) return 'Sofort';
+    if(s===3&&ae<6) return '≤ 30 Tage'; if(s===2&&ae>=6) return '≤ 30 Tage'; return 'Review-Zyklus'; };
+  const MAT = [[1,1,2,2],[1,2,3,4],[2,3,4,5],[3,4,6,7]];
+  const AEZ = ae => ae<=2?0:ae<=4?1:ae<=9?2:3;
+  const stufe = a => { const s=(parseInt(a.s)||1)-1, z=AEZ((parseInt(a.a)||0)*(parseInt(a.e)||0)); return MAT[Math.max(0,Math.min(3,s))][z]; };
+
+  // Status colour
+  const stCol = st => st==='Offen'?'#C00000':st==='In Bearbeitung'?'#C85A00':'#1E6B1E';
+
+  // Build team rows
+  let teamRows = '';
+  if (team.length) {
+    team.forEach(t => {
+      teamRows += `<tr><td>${esc2(t.name)}</td><td>${esc2(t.abteilung)}</td><td>${esc2(t.rolle)}</td></tr>`;
+    });
+  } else {
+    teamRows = '<tr><td colspan="3" style="color:#999;font-style:italic;">–</td></tr>';
+  }
+
+  // Build FMEA rows
+  let fmeaRows = '';
+  let gNr = 0;
+  zeilen.forEach(z => {
+    gNr++;
+    const anz = z.auswirkungen.length;
+    z.auswirkungen.forEach((a, ai) => {
+      const st  = stufe(a);
+      const ae  = (parseInt(a.a)||0)*(parseInt(a.e)||0);
+      const sv  = parseInt(a.s)||0;
+      const awId = `${gNr}.${ai+1}`;
+      const termin = a.termin ? a.termin.split('-').reverse().join('.') : '';
+
+      const gapCells = ai === 0 ? `
+        <td rowspan="${anz}" style="text-align:center;font-weight:bold;color:#1B4F8A;background:#EBF1F8;border-right:2px solid #2E6DA4;vertical-align:middle;">${gNr}</td>
+        <td rowspan="${anz}" style="background:#EBF1F8;vertical-align:top;font-weight:bold;">${esc2(z.gap)}</td>
+        <td rowspan="${anz}" style="background:#EBF1F8;vertical-align:top;">${esc2(z.norm)}</td>
+        <td rowspan="${anz}" style="background:#EBF1F8;border-right:2px solid #2E6DA4;vertical-align:top;">${esc2(z.kontrolle)}</td>` : '';
+
+      fmeaRows += `<tr style="border-bottom:1px solid #DDD;${ai>0?'border-top:1px dashed #CCC;':''}">
+        ${gapCells}
+        <td><span style="font-size:7px;font-weight:bold;color:#1B4F8A;">${awId}</span><br>${esc2(a.text)}</td>
+        <td>${esc2(a.ort||'')}</td>
+        <td style="text-align:center;font-weight:bold;color:#C00000;">${a.s||'–'}</td>
+        <td style="text-align:center;font-weight:bold;color:#C85A00;">${a.a||'–'}</td>
+        <td style="text-align:center;font-weight:bold;color:#1B4F8A;">${a.e||'–'}</td>
+        <td style="text-align:center;">
+          ${sv ? `<div style="display:inline-block;padding:2px 5px;background:${MFARBE[st]};color:${MTXT[st]};font-weight:bold;font-size:9px;border:1px solid #ccc;">
+            ${st}<br><span style="font-weight:normal;font-size:7px;">${MLABEL[st]}</span></div>` : '–'}
+        </td>
+        <td style="color:${ENTCOL[sv]||'#666'};font-weight:bold;">${sv ? ENTLBL[sv] : '–'}<br><span style="font-weight:normal;color:#666;">${DRING(a)}</span></td>
+        <td style="font-style:italic;color:#444;">${esc2(a.begruendung)}</td>
+        <td>${esc2(a.massnahme)}</td>
+        <td>${esc2(a.restrisiko)}</td>
+        <td>${esc2(a.verantwortlich)}</td>
+        <td>${termin}</td>
+        <td style="font-weight:bold;color:${stCol(a.status||'Offen')};">${esc2(a.status||'Offen')}</td>
+      </tr>`;
+    });
+    // Gap separator
+    fmeaRows += `<tr><td colspan="17" style="height:3px;background:#1B4F8A;padding:0;border:none;"></td></tr>`;
+  });
+
+  // Summary
+  const alleAusw = zeilen.flatMap(z=>z.auswirkungen||[]);
+  const sumKrit  = alleAusw.filter(a=>parseInt(a.s)===4).length;
+  const sumHoch  = alleAusw.filter(a=>parseInt(a.s)===3).length;
+  const sumMit   = alleAusw.filter(a=>parseInt(a.s)===2).length;
+  const sumGer   = alleAusw.filter(a=>parseInt(a.s)===1).length;
+  const sumOff   = alleAusw.filter(a=>a.status==='Offen').length;
+  const sumZu    = alleAusw.filter(a=>a.status==='Abgeschlossen').length;
+  const maxSt    = alleAusw.length ? Math.max(...alleAusw.map(a=>stufe(a))) : 0;
+
+  const html = `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Compliance FMEA – ${esc2(proj||'SCHURTER')}</title>
+<style>
+  @page { size: A4 landscape; margin: 7mm 7mm 7mm 7mm; }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  body { font-family: Arial, Helvetica, sans-serif; font-size: 8px; color: #1A1A1A; background: white; }
+
+  /* HEADER */
+  .kopf { background: #1B4F8A; padding: 5px 10px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
+  .logo { background: white; color: #1B4F8A; font-weight: bold; font-size: 10px; padding: 2px 6px; letter-spacing: 1.5px; }
+  .logo-sub { display: block; font-size: 6px; letter-spacing: 1px; font-weight: normal; }
+  .titel { font-size: 13px; font-weight: bold; color: white; margin-left: 10px; }
+  .untertitel { font-size: 8px; color: rgba(255,255,255,0.7); }
+  .kopf-rechts { text-align: right; color: rgba(255,255,255,0.8); font-size: 8px; }
+  .kopf-rechts strong { font-size: 10px; color: white; display: block; }
+
+  /* SECTIONS */
+  .section { border: 1px solid #CCC; border-top: 2px solid #1B4F8A; padding: 6px 8px; margin-bottom: 5px; }
+  .section-title { font-size: 8px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; color: #1B4F8A; border-bottom: 1px solid #DDD; padding-bottom: 3px; margin-bottom: 5px; }
+
+  /* META GRID */
+  .meta-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 4px 12px; }
+  .meta-field label { font-size: 7px; font-weight: bold; text-transform: uppercase; color: #6F6F6F; display: block; }
+  .meta-field span { font-size: 8px; border-bottom: 1px solid #DDD; display: block; min-height: 11px; padding-bottom: 1px; }
+  .meta-full { grid-column: 1/-1; }
+
+  /* TEAM TABLE */
+  .team-table { width: 100%; border-collapse: collapse; }
+  .team-table th { background: #1B4F8A; color: white; font-size: 7px; font-weight: bold; text-transform: uppercase; padding: 2px 5px; text-align: left; }
+  .team-table td { font-size: 8px; padding: 2px 5px; border-bottom: 1px solid #EEE; }
+
+  /* FMEA TABLE */
+  .fmea-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+  .fmea-table thead tr { background: #1B4F8A; color: white; }
+  .fmea-table th { font-size: 7px; font-weight: bold; text-transform: uppercase; padding: 3px 3px; text-align: left; border-right: 1px solid #2E6DA4; white-space: normal; word-break: break-word; line-height: 1.2; vertical-align: bottom; }
+  .fmea-table th:last-child { border-right: none; }
+  .fmea-table th.th-s { background: #8B0010; }
+  .fmea-table th.th-a { background: #8B3800; }
+  .fmea-table th.th-e { background: #0D3060; }
+  .fmea-table th.th-r { background: #111827; }
+  .fmea-table td { font-size: 7.5px; padding: 3px 3px; vertical-align: top; border-right: 1px solid #EEE; word-break: break-word; }
+  .fmea-table td:last-child { border-right: none; }
+  /* Column widths – A4 landscape ca. 283mm usable */
+  .fmea-table .c-nr   { width: 14px; }
+  .fmea-table .c-gap  { width: 11%; }
+  .fmea-table .c-norm { width: 8%; }
+  .fmea-table .c-ctrl { width: 8%; }
+  .fmea-table .c-ausw { width: 10%; }
+  .fmea-table .c-ort  { width: 7%; }
+  .fmea-table .c-s    { width: 16px; }
+  .fmea-table .c-a    { width: 16px; }
+  .fmea-table .c-e    { width: 16px; }
+  .fmea-table .c-risk { width: 44px; }
+  .fmea-table .c-ent  { width: 8%; }
+  .fmea-table .c-begr { width: 11%; }
+  .fmea-table .c-mass { width: 11%; }
+  .fmea-table .c-rest { width: 7%; }
+  .fmea-table .c-ver  { width: 6%; }
+  .fmea-table .c-ter  { width: 5%; }
+  .fmea-table .c-stat { width: 5%; }
+
+  /* SUMMARY */
+  .summary { display: flex; gap: 16px; border: 1px solid #CCC; border-left: 4px solid #1B4F8A; padding: 5px 10px; margin-bottom: 5px; flex-wrap: wrap; }
+  .sum-item label { font-size: 7px; font-weight: bold; text-transform: uppercase; color: #6F6F6F; display: block; }
+  .sum-item span  { font-size: 14px; font-weight: bold; }
+
+  /* ACTION GUIDE */
+  .guide { display: grid; grid-template-columns: repeat(4,1fr); gap: 0; border: 1px solid #CCC; margin-bottom: 5px; }
+  .guide-cell { padding: 5px 7px; font-size: 7.5px; border-right: 1px solid #CCC; }
+  .guide-cell:last-child { border-right: none; }
+  .guide-cell strong { display: block; font-size: 9px; margin-bottom: 3px; }
+  .guide-cell li { margin-left: 10px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="kopf">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="logo">SCHURTER<span class="logo-sub">ELECTRONIC COMPONENTS</span></div>
+    <div><div class="titel">Compliance FMEA</div><div class="untertitel">Fehlerarten- und Auswirkungsanalyse – Compliance &amp; Produktsicherheit</div></div>
+  </div>
+  <div class="kopf-rechts"><strong>${esc2(proj||'Compliance FMEA')}</strong>${[doknr,datumCH,quality?'Quality: '+esc2(quality):''].filter(Boolean).join(' · ')}</div>
+</div>
+
+<!-- DOKUMENTKOPF -->
+<div class="section">
+  <div class="section-title">Dokumentkopf</div>
+  <div class="meta-grid">
+    <div class="meta-field"><label>Projekt / Produkt</label><span>${esc2(proj)}</span></div>
+    <div class="meta-field"><label>Artikelnummer</label><span>${esc2(doknr)}</span></div>
+    <div class="meta-field"><label>Datum</label><span>${datumCH}</span></div>
+    <div class="meta-field"><label>Erstellt von</label><span>${esc2(autor)}</span></div>
+    <div class="meta-field"><label>Geprüft von</label><span>${esc2(pruefer)}</span></div>
+    <div class="meta-field"><label>Quality Verantwortlicher</label><span>${esc2(quality)}</span></div>
+    <div class="meta-field"><label>Freigabe (Management)</label><span>${esc2(freig)}</span></div>
+    <div class="meta-field meta-full"><label>Analysegegenstand / Auslöser</label><span>${esc2(umfang)}</span></div>
+  </div>
+</div>
+
+<!-- TEAM -->
+<div class="section">
+  <div class="section-title">Beteiligte Personen</div>
+  <table class="team-table">
+    <thead><tr><th>Name</th><th>Abteilung / Funktion</th><th>Rolle in dieser FMEA</th></tr></thead>
+    <tbody>${teamRows}</tbody>
+  </table>
+</div>
+
+<!-- SUMMARY -->
+<div class="summary">
+  <div class="sum-item"><label>Gaps total</label><span style="color:#1B4F8A">${zeilen.length}</span></div>
+  <div class="sum-item"><label>S=4 Management</label><span style="color:#C00000">${sumKrit}</span></div>
+  <div class="sum-item"><label>S=3 Ressort</label><span style="color:#C85A00">${sumHoch}</span></div>
+  <div class="sum-item"><label>S=2 Engineering</label><span style="color:#7A6000">${sumMit}</span></div>
+  <div class="sum-item"><label>S=1 Dokumentieren</label><span style="color:#1E6B1E">${sumGer}</span></div>
+  <div class="sum-item"><label>Max Risiko</label><span>${maxSt||'—'}</span></div>
+  <div class="sum-item"><label>Offen</label><span style="color:#C00000">${sumOff}</span></div>
+  <div class="sum-item"><label>Abgeschlossen</label><span style="color:#1E6B1E">${sumZu}</span></div>
+</div>
+
+<!-- FMEA TABLE -->
+<div style="border:1px solid #CCC;margin-bottom:5px;">
+  <table class="fmea-table">
+    <colgroup>
+      <col class="c-nr"><col class="c-gap"><col class="c-norm"><col class="c-ctrl">
+      <col class="c-ausw"><col class="c-ort">
+      <col class="c-s"><col class="c-a"><col class="c-e"><col class="c-risk">
+      <col class="c-ent"><col class="c-begr"><col class="c-mass"><col class="c-rest">
+      <col class="c-ver"><col class="c-ter"><col class="c-stat">
+    </colgroup>
+    <thead>
+      <tr>
+        <th class="c-nr">#</th>
+        <th class="c-gap">Fehlerart / Gap</th>
+        <th class="c-norm">Norm / Referenz</th>
+        <th class="c-ctrl">Bestehende Kontrolle</th>
+        <th class="c-ausw">Auswirkung</th>
+        <th class="c-ort">Ort des Fehlers</th>
+        <th class="c-s th-s">S</th>
+        <th class="c-a th-a">A</th>
+        <th class="c-e th-e">E</th>
+        <th class="c-risk th-r">Risiko</th>
+        <th class="c-ent">Entscheid-Ebene</th>
+        <th class="c-begr">Begründung Bewertung</th>
+        <th class="c-mass">Massnahme</th>
+        <th class="c-rest">Restrisiko</th>
+        <th class="c-ver">Verantwortlich</th>
+        <th class="c-ter">Zieldatum</th>
+        <th class="c-stat">Status</th>
+      </tr>
+    </thead>
+    <tbody>${fmeaRows}</tbody>
+  </table>
+</div>
+
+<!-- ACTION GUIDE -->
+<div class="guide">
+  <div class="guide-cell" style="background:#F0FFF0;">
+    <strong style="color:#1E6B1E;">S = 1 – Dokumentieren &amp; Überwachen</strong>
+    <ul><li>ZI eröffnen</li><li>Befund festhalten</li><li>Periodisch prüfen</li></ul>
+  </div>
+  <div class="guide-cell" style="background:#E8F0E8;">
+    <strong style="color:#7A6000;">S = 2 – Engineering-Massnahme</strong>
+    <ul><li>ZI eröffnen</li><li>Massnahme, Verantwortlichen &amp; Termin definieren</li><li>Status nachverfolgen</li></ul>
+  </div>
+  <div class="guide-cell" style="background:#FFF8EE;">
+    <strong style="color:#C85A00;">S = 3 – Ressort-Entscheid</strong>
+    <ul><li>ZI eröffnen</li><li>Massnahme, Verantwortlichen &amp; Termin definieren</li><li>Compliance Verantwortlichen informieren</li><li>R&amp;D Management einbeziehen &amp; Freigabe einholen</li></ul>
+  </div>
+  <div class="guide-cell" style="background:#FFF0F0;">
+    <strong style="color:#C00000;">S = 4 – Management-Entscheid</strong>
+    <ul><li>ZI eröffnen</li><li>Massnahme, Verantwortlichen &amp; Termin definieren</li><li>Compliance Verantwortlichen informieren</li><li>R&amp;D Management einbeziehen &amp; Freigabe einholen</li><li>Produkt sperren bis Entscheid vorliegt</li><li>Risikoakzeptanz durch Management</li></ul>
+  </div>
+</div>
+
+<script>window.onload = function(){ window.print(); };<\/script>
+</body></html>`;
+
+  const w = window.open('', '_blank');
+  w.document.write(html);
+  w.document.close();
+}
+
+
+laden();
+aktualisiereKopf();
+renderTeam();
+render();
+
+// ── BUBBLE CHART ──────────────────────────────────────────────────────
+let bubbleChart = null;
+
+const BUBBLE_FARBEN = {
+  1: '#A5D6A7', 2: '#C5E1A5', 3: '#FFF176', 4: '#FFCC02',
+  5: '#FF8A65', 6: '#EF5350', 7: '#B71C1C'
+};
+const BUBBLE_RAND = {
+  1: '#2E7D32', 2: '#558B2F', 3: '#F9A825', 4: '#E65100',
+  5: '#BF360C', 6: '#C62828', 7: '#7F0000'
+};
+
+function statusRadius(status) {
+  if (status === 'Offen') return 18;
+  if (status === 'In Bearbeitung') return 12;
+  return 7;
+}
+
+function renderBubbleChart() {
+  const canvas = document.getElementById('bubble-chart');
+  if (!canvas) return;
+
+  let _gNr = 0;
+  const alleAusw = zeilen.flatMap(z => {
+    _gNr++;
+    return z.auswirkungen.map((a, ai) => ({
+      ...a,
+      gapText: z.gap,
+      awId: `${_gNr}.${ai+1}`,
+      x: rpz(a),
+      y: a.s || 1,
+      stufe: matrixStufe(a),
+      r: statusRadius(a.status || 'Offen')
+    }));
+  });
+
+  if (alleAusw.length === 0) {
+    const ctx = canvas.getContext('2d');
+    canvas.height = 80;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.font = '12px Arial';
+    ctx.fillStyle = '#999';
+    ctx.textAlign = 'center';
+    ctx.fillText('Keine Daten – Gaps und Auswirkungen erfassen', canvas.width/2, 40);
+    return;
+  }
+
+  const datasets = alleAusw.map(a => ({
+    label: a.awId,
+    data: [{ x: a.x, y: a.y, r: a.r }],
+    backgroundColor: BUBBLE_FARBEN[a.stufe] + 'CC',
+    borderColor: BUBBLE_RAND[a.stufe],
+    borderWidth: 2,
+    _meta: a
+  }));
+
+  if (bubbleChart) { bubbleChart.destroy(); bubbleChart = null; }
+
+  const ctx = canvas.getContext('2d');
+  bubbleChart = new Chart(ctx, {
+    type: 'bubble',
+    data: { datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 400 },
+      layout: { padding: { top: 10, right: 20, bottom: 10, left: 10 } },
+      scales: {
+        x: {
+          title: { display: true, text: 'A × E (Dringlichkeit)', font: { size: 11, family: 'Arial' }, color: '#6F6F6F' },
+          min: 0, max: 17,
+          ticks: {
+            stepSize: 1,
+            callback: v => v > 0 && v <= 16 ? v : '',
+            font: { size: 10, family: 'Arial' }
+          },
+          grid: { color: '#EEEEEE' }
+        },
+        y: {
+          title: { display: true, text: 'S (Schwere)', font: { size: 11, family: 'Arial' }, color: '#6F6F6F' },
+          min: 0, max: 5,
+          ticks: {
+            stepSize: 1,
+            callback: v => {
+              const l = ['','Nebenfehler','HF intern','HF extern','Sicherheit'];
+              return l[v] || '';
+            },
+            font: { size: 10, family: 'Arial' }
+          },
+          grid: { color: '#EEEEEE' }
+        }
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            title: items => {
+              const m = items[0]?.dataset?._meta;
+              return m ? `${m.awId}  ${(m.gapText||'').substring(0,40)}` : '';
+            },
+            label: item => {
+              const m = item.dataset._meta;
+              const lines = [
+                m.text ? '→ ' + m.text.substring(0, 60) : '',
+                'S=' + m.y + '  A×E=' + m.x + '  Stufe ' + m.stufe + ': ' + MATRIX_LABEL[m.stufe],
+                'Status: ' + (m.status || 'Offen')
+              ];
+              return lines.filter(Boolean);
+            }
+          },
+          bodyFont: { size: 11, family: 'Arial' },
+          titleFont: { size: 11, family: 'Arial', weight: 'bold' },
+          backgroundColor: 'rgba(28,28,28,0.92)',
+          padding: 10
+        }
+      },
+      onClick: null
+    },
+    plugins: [{
+      id: 'bubbleLabels',
+      afterDraw(chart) {
+        const ctx = chart.ctx;
+        chart.data.datasets.forEach(ds => {
+          const meta = chart.getDatasetMeta(chart.data.datasets.indexOf(ds));
+          if (!meta.hidden && meta.data.length > 0) {
+            const pt = meta.data[0];
+            const r = ds.data[0].r;
+            ctx.save();
+            ctx.fillStyle = r >= 14 ? '#333' : '#555';
+            ctx.font = `bold ${Math.max(7, r*0.55)}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(ds.label, pt.x, pt.y);
+            ctx.restore();
+          }
+        });
+      }
+    }]
+  });
+
+  // Fix canvas height
+  canvas.style.height = '300px';
+}
+
+</script>
+</body>
+</html>
